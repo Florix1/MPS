@@ -1,0 +1,419 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"l",
+				"l"
+			],
+			[
+				"R",
+				"R"
+			],
+			[
+				"sub",
+				"subgroup"
+			],
+			[
+				"ca",
+				"cartAux"
+			],
+			[
+				"diff",
+				"difference"
+			],
+			[
+				"inters",
+				"intersect"
+			],
+			[
+				"not",
+				"notContains"
+			],
+			[
+				"e",
+				"elimDup"
+			],
+			[
+				"un",
+				"unionAux"
+			],
+			[
+				"E",
+				"elimDup"
+			],
+			[
+				"T",
+				"T"
+			],
+			[
+				"re",
+				"removeElem"
+			],
+			[
+				"a",
+				"ana"
+			],
+			[
+				"r",
+				"removeElem"
+			],
+			[
+				"is",
+				"isList"
+			],
+			[
+				"co",
+				"contains"
+			],
+			[
+				"n",
+				"notContains"
+			],
+			[
+				"d",
+				"direct"
+			],
+			[
+				"min",
+				"minimum"
+			],
+			[
+				"j",
+				"j"
+			],
+			[
+				"lista",
+				"lista"
+			],
+			[
+				"i",
+				"i"
+			],
+			[
+				"lis",
+				"listArray"
+			],
+			[
+				"c",
+				"c"
+			],
+			[
+				"I",
+				"Infinit"
+			],
+			[
+				"fi",
+				"filter2"
+			],
+			[
+				"b",
+				"b"
+			],
+			[
+				"suM",
+				"sumAux"
+			],
+			[
+				"Int",
+				"Int"
+			],
+			[
+				"St",
+				"String"
+			],
+			[
+				"s",
+				"Student"
+			],
+			[
+				"z",
+				"zipStudent"
+			],
+			[
+				"pr",
+				"prietenCuMatei"
+			],
+			[
+				"Nr",
+				"Nr"
+			],
+			[
+				"ex",
+				"extDiv"
+			],
+			[
+				"ext",
+				"extLess"
+			],
+			[
+				"N",
+				"Nothing"
+			],
+			[
+				"mAT",
+				"MathMaybe"
+			],
+			[
+				"IN",
+				"Int"
+			],
+			[
+				"iN",
+				"Infinit"
+			],
+			[
+				"let",
+				"length"
+			],
+			[
+				"le",
+				"length"
+			],
+			[
+				"m",
+				"m"
+			],
+			[
+				"fil",
+				"filter"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"settings":
+			{
+				"buffer_size": 0,
+				"line_ending": "Windows"
+			}
+		}
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"console":
+	{
+		"height": 0.0,
+		"history":
+		[
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"expanded_folders":
+	[
+		"/D/Dev/MPS"
+	],
+	"file_history":
+	[
+		"/D/Dev/MPS/src/products/models.py",
+		"/D/Dev/MPS/src/concurs/settings.py",
+		"/D/Dev/MPS/src/products/admin.py",
+		"/D/Dev/MPS/src/manage.py",
+		"/D/Lab PP/6.txt",
+		"/D/Lab PP/5.txt",
+		"/D/Lab PP/4.txt",
+		"/D/Lab PP/Lab5.hs",
+		"/D/Lab PP/Lab4.hs",
+		"/D/Lab PP/Lab3.hs",
+		"/D/Lab PP/Lab2.hs",
+		"/D/Lab PP/Lab1.hs",
+		"/C/Users/Home/Documents/Prolog/third.pl",
+		"/D/Lab PP/Lab6.hs",
+		"/C/Users/Home/Desktop/module1.txt",
+		"/C/Users/Home/Desktop/module2.txt",
+		"/C/Users/Home/Documents/Prolog/second.pl",
+		"/C/Users/Home/Documents/Prolog/primul.pl",
+		"/C/Users/Home/Desktop/tests/Tema1.hs",
+		"/C/Users/Home/Desktop/RaduEdwardAndrei_321CB/Tema1.hs",
+		"/C/Users/Home/Documents/Prolog/first.pl",
+		"/C/Users/Home/Desktop/tests/Tema12.hs",
+		"/D/Lab PP/remove.hs",
+		"/C/Users/Home/Desktop/tests/Checker.hs",
+		"/C/Users/Home/Desktop/tests/Skel.hs"
+	],
+	"find":
+	{
+		"height": 30.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			");\n",
+			";\n",
+			"           ",
+			"union",
+			"       ",
+			", ",
+			"           |",
+			"Double",
+			"b",
+			"instance",
+			"Class",
+			")\n",
+			"-> ",
+			"]\n",
+			" \n"
+		],
+		"highlight": true,
+		"in_selection": true,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 0,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 0,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 30.0
+	},
+	"input":
+	{
+		"height": 0.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"pinned_build_system": "",
+	"project": "contest.sublime-project",
+	"replace":
+	{
+		"height": 55.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 188.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}
