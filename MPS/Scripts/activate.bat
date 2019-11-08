@@ -1,6 +1,6 @@
 @echo off
 
-set "VIRTUAL_ENV=D:\Dev\MPS"
+set "VIRTUAL_ENV=D:\Repository_Mps\MPS"
 
 if defined _OLD_VIRTUAL_PROMPT (
     set "PROMPT=%_OLD_VIRTUAL_PROMPT%"
