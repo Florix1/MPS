@@ -16,14 +16,9 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from .views import (
-    contest_post_list_view
-)
-
+from .views import home_page
 
 urlpatterns = [
-	path('', contest_post_list_view),
+	path('', home_page),
     path('admin/', admin.site.urls),
-    path('contest-create/', contest_post_list_view),
-    #path('contest/<str:slug>/', contest_post_list_view),    
 ]
