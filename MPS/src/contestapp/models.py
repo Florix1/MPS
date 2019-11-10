@@ -10,10 +10,22 @@ class Contest(models.Model):
 	membersPerTeam			=	models.PositiveIntegerField()
 	slug 					=	models.SlugField(unique=True)
 
+	def __str__(self):
+		return self.title
+
 	def save(self, *args, **kwargs):
 		if not self.id:
 			self.slug = slugify(self.title)
 		super(Contest, self).save(*args, **kwargs)
+
+	def get_absolute_url(self):
+		return f"/contest/{self.slug}"
+
+	def get_edit_url(self):
+		return f"/contest/{self.slug}/update"
+
+	def get_delete_url(self):
+		return f"/contest/{self.slug}/delete"
 
 
 class Team(models.Model):
@@ -23,15 +35,22 @@ class Team(models.Model):
 	isStillCompeting	=	models.BooleanField(default=True)
 	contest             =   models.ForeignKey('Contest', related_name='teams', on_delete=models.CASCADE)
 
+	def __str__(self):
+		return self.teamName
 
 class Category(models.Model):
 	name 				=	models.CharField(max_length=20)
 	contest             =   models.ForeignKey('Contest', related_name='categories', on_delete=models.CASCADE)
 
+	def __str__(self):
+		return self.name
 
 class Grade(models.Model):
 	categoryName 		=	models.ForeignKey('Category', related_name='grades', on_delete=models.CASCADE)
-	grade				=	models.PositiveIntegerField()
+	grade				=	models.PositiveIntegerField(default=0)
 	postedBy			=	models.ForeignKey(User, on_delete=models.CASCADE)
 	teamName 			=   models.ManyToManyField(Team)
-	roundNumber			=	models.PositiveIntegerField()
+	roundNumber			=	models.PositiveIntegerField()	roundNumber			=	models.PositiveIntegerField()	roundNumber			=	models.PositiveIntegerField()
+
+	def __str__(self):
+		return 'Nota_' + categoryName + '_' + teamName

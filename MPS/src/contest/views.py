@@ -29,8 +29,8 @@ def contest_post_create_view(request):
 
 def contest_post_detail_view(request, slug):
 	obj = get_object_or_404(Contest, slug=slug)
-	template_name	= 'contest_details.html'
-	context 		= {'object': obj}
+	template_name	= 'contest_detail.html'
+	context 		= {'object': obj, titlu : "Pune titlul asta", alt_parametru : "scrie asta undeva"}
 	return render(request, template_name, context)
 
 
@@ -46,7 +46,7 @@ def contest_post_update_view(request, slug):
 
 def contest_post_delete_view(request, slug):
 	obj = get_object_or_404(Contest, slug=slug)
-	template_name	= 'contest_delete.html'
+	template_name	= 'contests_delete.html'
 	context 		= {'object': obj}
 	if request.method == "POST":
 		obj.delete()
