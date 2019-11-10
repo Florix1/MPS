@@ -15,7 +15,7 @@ class Team(models.Model):
 	isDisqualified		=	models.BooleanField(default=False)
 	isStillCompeting	=	models.BooleanField(default=True)
 	contest             =   models.ForeignKey('Contest', related_name='teams', on_delete=models.CASCADE)
-
+	
 
 class Category(models.Model):
 	name 				=	models.CharField(max_length=20)
