@@ -28,6 +28,7 @@ from .views import (
 urlpatterns = [
 	path('', contest_post_list_view),
     path('admin/', admin.site.urls),
+    path('contest-list/', contest_post_list_view),
     path('contest-create/', contest_post_create_view),
     path('contest/<str:slug>/', contest_post_detail_view),
     path('contest/<str:slug>/update/', contest_post_update_view),
