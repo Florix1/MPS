@@ -11,13 +11,14 @@ class Contest(models.Model):
 	slug 					=	models.SlugField(unique=True)
 
 	def save(self, *args, **kwargs):
-		self.slug = slugify(self.slug)
+		if not self.id:
+			self.slug = slugify(self.title)
 		super(Contest, self).save(*args, **kwargs)
 
 
 class Team(models.Model):
 	teamName			=	models.CharField(max_length=30)
-	#//TODO namesList			=	models.ArrayField(models.CharField(max_length=40), default=list, null=True)
+	#//TODO 3 namesList			=	models.ArrayField(models.CharField(max_length=40), default=list, null=True)
 	isDisqualified		=	models.BooleanField(default=False)
 	isStillCompeting	=	models.BooleanField(default=True)
 	contest             =   models.ForeignKey('Contest', related_name='teams', on_delete=models.CASCADE)

@@ -3,5 +3,10 @@
 
 
 {% block content %}
-    <h1>Delete the contest</h1>
+    <h1>Are you sure you want to delete {{object.title}} ?</h1>
+
+<form method='POST'> {%csrf_token %}
+	
+	<button class='btn btn-danger'>Yes, detele</button>
+</form>
 {% endblock %}	

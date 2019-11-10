@@ -17,8 +17,11 @@ from django.contrib import admin
 from django.urls import path
 
 from .views import (
-    contest_post_list_view,
     contest_post_create_view,
+    contest_post_delete_view,
+    contest_post_detail_view,
+    contest_post_list_view,
+    contest_post_update_view,
 )
 
 
@@ -26,5 +29,7 @@ urlpatterns = [
 	path('', contest_post_list_view),
     path('admin/', admin.site.urls),
     path('contest-create/', contest_post_create_view),
-    #path('contest/<str:slug>/', contest_post_list_view),    
+    path('contest/<str:slug>/', contest_post_detail_view),
+    path('contest/<str:slug>/update/', contest_post_update_view),
+    path('contest/<str:slug>/delete/', contest_post_delete_view),
 ]

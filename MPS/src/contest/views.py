@@ -1,5 +1,5 @@
 from django.http import HttpResponse
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 
 from .forms import ContestPostModelForm
 
@@ -29,26 +29,26 @@ def contest_post_create_view(request):
 
 def contest_post_detail_view(request, slug):
 	obj = get_object_or_404(Contest, slug=slug)
-	template_name	= 'contest_detail.html'
-	context 		= {'form': form}
+	template_name	= 'contest_details.html'
+	context 		= {'object': obj}
 	return render(request, template_name, context)
 
 
-def contest_post_update_view(request):
-	form = ContestPostModelForm(request.POST or None)
+def contest_post_update_view(request, slug):
+	obj = get_object_or_404(Contest, slug=slug)
+	form = ContestPostModelForm(request.POST or None, instance=obj)
 	if form.is_valid():
 		form.save()
-		form = ContestPostModelForm()
-	template_name	= 'contest_update.html'
+	template_name	= 'contest_form.html'
 	context 		= {'form': form}
 	return render(request, template_name, context)
 
 
 def contest_post_delete_view(request, slug):
-	form = ContestPostModelForm(request.POST or None)
-	if form.is_valid():
-		form.save()
-		form = ContestPostModelForm()
-	template_name	= 'contests_delete.html'
-	context 		= {'form': form}
+	obj = get_object_or_404(Contest, slug=slug)
+	template_name	= 'contest_delete.html'
+	context 		= {'object': obj}
+	if request.method == "POST":
+		obj.delete()
+		return redirect("/")
 	return render(request, template_name, context)
