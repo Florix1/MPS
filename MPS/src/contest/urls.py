@@ -17,13 +17,14 @@ from django.contrib import admin
 from django.urls import path
 
 from .views import (
-    contest_post_list_view
+    contest_post_list_view,
+    contest_post_create_view,
 )
 
 
 urlpatterns = [
 	path('', contest_post_list_view),
     path('admin/', admin.site.urls),
-    path('contest-create/', contest_post_list_view),
+    path('contest-create/', contest_post_create_view),
     #path('contest/<str:slug>/', contest_post_list_view),    
 ]

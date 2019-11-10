@@ -1,6 +1,8 @@
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404
 
+from .forms import ContestPostModelForm
+
 from contestapp.models import (
 		Contest,
 		Team,
