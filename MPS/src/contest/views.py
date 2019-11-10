@@ -1,6 +1,6 @@
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
-
+from django.forms import inlineformset_factory
 from .forms import ContestPostModelForm
 
 from contestapp.models import (
@@ -60,6 +60,20 @@ def contest_post_delete_view(request, slug):
 
 # Category ===================================================================
 
+def category_create_update_post_view(request, slug):
+	obj 				= get_object_or_404(Contest, slug=slug)
+	template_name		= 'category/create_update.html'
+	CategoryFormset		= inlineformset_factory(Contest, Category, fields=('name',))
+	
+	if request.method == 'POST':
+		formset = CategoryFormset(request.POST, instance=obj)
+		if formset.is_valid():
+			formset.save()
+			return redirect(category_create_update_post_view, slug=slug)
+
+	formset 			= CategoryFormset(instance=obj)
+	context 			= {'formset': formset}
+	return render(request, template_name, context)
 
 # Team ===================================================================
 

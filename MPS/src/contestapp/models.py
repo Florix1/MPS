@@ -51,8 +51,13 @@ class Grade(models.Model):
 	teamName 			=   models.ManyToManyField(Team)
 	roundNumber			=	models.PositiveIntegerField()
 
+	def __str__(self):
+		return 'Nota_' + self.teamName + '_' + self.categoryName
+
 class Person(models.Model):
 	name 				=	models.CharField(max_length=30)
 	age 				=	models.PositiveIntegerField()
 	team 				=	models.ForeignKey('Team', related_name='persons', on_delete=models.CASCADE)
 
+	def __str__(self):
+		return self.name

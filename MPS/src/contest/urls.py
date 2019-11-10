@@ -22,6 +22,7 @@ from .views import (
     contest_post_detail_view,
     contest_post_list_view,
     contest_post_update_view,
+    category_create_update_post_view,
 )
 
 
@@ -33,4 +34,5 @@ urlpatterns = [
     path('contest/<str:slug>/', contest_post_detail_view),
     path('contest/<str:slug>/update/', contest_post_update_view),
     path('contest/<str:slug>/delete/', contest_post_delete_view),
+    path('contest/<str:slug>/category-new/', category_create_update_post_view)
 ]
