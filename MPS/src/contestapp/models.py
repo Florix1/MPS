@@ -18,7 +18,6 @@ class Contest(models.Model):
 
 class Team(models.Model):
 	teamName			=	models.CharField(max_length=30)
-	#//TODO 3 namesList			=	models.ArrayField(models.CharField(max_length=40), default=list, null=True)
 	isDisqualified		=	models.BooleanField(default=False)
 	isStillCompeting	=	models.BooleanField(default=True)
 	contest             =   models.ForeignKey('Contest', related_name='teams', on_delete=models.CASCADE)
@@ -35,3 +34,8 @@ class Grade(models.Model):
 	postedBy			=	models.ForeignKey(User, on_delete=models.CASCADE)
 	teamName 			=   models.ManyToManyField(Team)
 	roundNumber			=	models.PositiveIntegerField()
+
+class Person(models.Model):
+	name 				=	models.CharField(max_length=30)
+	age 				=	models.PositiveIntegerField()
+	team 				=	models.ForeignKey('Team', related_name='persons', on_delete=models.CASCADE)

@@ -8,6 +8,7 @@ from contestapp.models import (
 		Team,
 		Category,
 		Grade,
+		Person,
 	)
 
 def contest_post_list_view(request):
