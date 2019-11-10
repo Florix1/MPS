@@ -1,8 +1,5 @@
-
 from django.db import models
-from django.conf import settings
-
-User = settings.AUTH_USER_MODEL
+from django.contrib.auth.models import User
 # Create your models here.
 
 
@@ -13,15 +10,15 @@ class Contest(models.Model):
 
 
 class Team(models.Model):
-	teamName			=	models.CharField(max_length=50)
-	#//TODO 1 Contender (similar to category)
+	teamName			=	models.CharField(max_length=30)
+	#//TODO namesList			=	models.ArrayField(models.CharField(max_length=40), default=list, null=True)
 	isDisqualified		=	models.BooleanField(default=False)
 	isStillCompeting	=	models.BooleanField(default=True)
 	contest             =   models.ForeignKey('Contest', related_name='teams', on_delete=models.CASCADE)
 
 
 class Category(models.Model):
-	name 				=	models.CharField(max_length=50)
+	name 				=	models.CharField(max_length=20)
 	contest             =   models.ForeignKey('Contest', related_name='categories', on_delete=models.CASCADE)
 
 
@@ -31,4 +28,3 @@ class Grade(models.Model):
 	postedBy			=	models.ForeignKey(User, on_delete=models.CASCADE)
 	teamName 			=   models.ManyToManyField(Team)
 	roundNumber			=	models.PositiveIntegerField()
-	comment				=	models.CharField(max_length=150, default='Nothing to add.', null=True)
