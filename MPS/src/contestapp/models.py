@@ -50,7 +50,7 @@ class Grade(models.Model):
 	grade				=	models.PositiveIntegerField(default=0)
 	postedBy			=	models.ForeignKey(User, on_delete=models.CASCADE)
 	teamName 			=   models.ManyToManyField(Team)
-	roundNumber			=	models.PositiveIntegerField()	roundNumber			=	models.PositiveIntegerField()	roundNumber			=	models.PositiveIntegerField()
+	roundNumber			=	models.PositiveIntegerField()
 
 	def __str__(self):
 		return 'Nota_' + categoryName + '_' + teamName
