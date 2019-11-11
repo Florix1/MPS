@@ -55,7 +55,7 @@ def contest_post_update_view(request, slug):
 @login_required(login_url='/admin')
 def contest_post_delete_view(request, slug):
 	obj = get_object_or_404(Contest, slug=slug)
-	template_name	= 'contests/delete.html'
+	template_name	= 'contest/delete.html'
 	context 		= {'object': obj}
 	if request.method == "POST":
 		obj.delete()
@@ -150,3 +150,4 @@ def person_list_view(request, slug, pk):
 
 def person_crud_view(request, slug, pk):
 	pass
+	
