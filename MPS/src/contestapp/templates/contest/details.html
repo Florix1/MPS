@@ -3,10 +3,10 @@
 
 
 {% block content %}
-    <h1>Detail of the contest</h1>
-    <p>Title : {{ object.title }}</p>
-    <p>TeamCout : {{ object.teamCount }} </p>
-    <p>MembersPerTeam : {{ object.membersPerTeam }} </p>
+    <h1>About</h1>
+    <p style="color: white;">Title: {{ object.title }}</p>
+    <p style="color: white;">TeamCount: {{ object.teamCount }} </p>
+    <p style="color: white;">MembersPerTeam: {{ object.membersPerTeam }} </p>
     <a href='{{ object.get_edit_url }}'>Edit</a>
 	<a href='{{ object.get_delete_url }}'>Delete</a>
 {% endblock %}

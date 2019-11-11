@@ -3,11 +3,13 @@
 
 
 {% block content %}
-    <h1>Create new Contest</h1>
+    <h1 style="color: white">Create new Contest</h1>
 
 
 <form method='POST' action=''> {% csrf_token %}
-	{{ form.as_p }}
-	<button type='submit'>Let's get started</button>
+    <p style="color: white;">Title: {{ object.title }}</p>
+    <p style="color: white;">TeamCount: {{ object.teamCount }} </p>
+    <p style="color: white;">MembersPerTeam: {{ object.membersPerTeam }} </p>
+	<button type='submit' class="btn btn2 btn-lg">Let's get started</button>
 </form>
 {% endblock %}
