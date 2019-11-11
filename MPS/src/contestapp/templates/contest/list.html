@@ -6,10 +6,13 @@
     
 	{% for object in object_list %}
 
-<div class="container h-100">
+<div class="container h-100" style="padding-top: 1%;">
 	<div class="d-flex h-100">
-		<div class="align-self-center mx-auto btn-group-vertical" style="width:1000px;" align="left">
-		<button type="button" class="btn btn-warning btn-lg"><a href = "{{object.get_absolut_url}}">{{object.title}}</a></button>
+		<div class="align-self-center mx-auto btn-group-vertical" style="width:1000px;" align="center">
+		<button type="button" class="btn btn1 btn-lg">
+            <a style="color: black; text-opacity: 100%" href='{{ object.get_absolute_url }}'>{{object.title}}</a>
+        </button>
+
 		</div>
 	</div>
 </div>
