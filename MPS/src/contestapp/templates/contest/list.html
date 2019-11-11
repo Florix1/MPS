@@ -5,8 +5,8 @@
 {% block content %}
     
 	{% for object in object_list %}
-<div class="btn-group-vertical" style="width:350px;" align="center">
-	<button type="button" class="btn btn-primary "><a href = "{{object.get_absolut_url}}">{{object.title}}</a></button>
+<div class="btn-group-vertical" style="width:500px;" align="center">
+	<button type="button" class="btn btn-warning"><a href = "{{object.get_absolut_url}}">{{object.title}}</a></button>
 
 </div>
 {% endfor %}
