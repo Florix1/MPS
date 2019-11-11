@@ -8,6 +8,7 @@ class Contest(models.Model):
 	title					=	models.CharField(max_length=50, unique=True)
 	teamCount				=	models.PositiveIntegerField()
 	membersPerTeam			=	models.PositiveIntegerField()
+	#isStarted				=	models.BooleanField(default=False)
 	slug 					=	models.SlugField(unique=True)
 
 	def __str__(self):
