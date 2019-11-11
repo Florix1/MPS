@@ -58,24 +58,57 @@ def contest_post_delete_view(request, slug):
 
 
 
-# Category ===================================================================
+# Category  =================================================================
 
-def category_create_update_post_view(request, slug):
+def category_crud_post_view(request, slug):
 	obj 				= get_object_or_404(Contest, slug=slug)
-	template_name		= 'category/create_update.html'
-	CategoryFormset		= inlineformset_factory(Contest, Category, fields=('name',))
+	template_name		= 'category/crud.html'
+	CategoryFormset		= inlineformset_factory(Contest, Category, fields=('name',), can_delete=True, extra=1, max_num=15)
 	
 	if request.method == 'POST':
 		formset = CategoryFormset(request.POST, instance=obj)
 		if formset.is_valid():
 			formset.save()
-			return redirect(category_create_update_post_view, slug=slug)
+			return redirect(category_crud_post_view, slug=slug)
 
 	formset 			= CategoryFormset(instance=obj)
 	context 			= {'formset': formset}
 	return render(request, template_name, context)
 
-# Team ===================================================================
+
+def category_post_list_view(request, slug):
+	qs = Category.objects.filter(contest__slug=slug)
+	template_name	= 'category/list.html'
+	context 		= {'object_list': qs}
+	return render(request, template_name, context)
+
+# Team ======================================================================
+
+def team_list_post_view(request, slug):
+	qs = Team.objects.filter(contest__slug=slug)
+	template_name	= 'team/list.html'
+	context 		= {'object_list': qs}
+	return render(request, template_name, context)
 
 
-# Grade ===================================================================
+def team_crud_post_view(request, slug):
+	obj 				= get_object_or_404(Contest, slug=slug)
+	template_name		= 'team/crud.html'
+	TeamFormset			= inlineformset_factory(Contest, Team, fields=('teamName',), can_delete=True, extra=1, max_num=obj.membersPerTeam)
+	
+	if request.method == 'POST':
+		formset = TeamFormset(request.POST, instance=obj)
+		if formset.is_valid():
+			formset.save()
+			return redirect(team_crud_post_view, slug=slug)
+	formset 		= TeamFormset(instance=obj)
+	context 		= {'formset': formset}
+	return render(request, template_name, context)
+
+
+# Grade =====================================================================
+
+#//TODO team-category or category-team
+
+# Person ====================================================================
+
