@@ -150,3 +150,4 @@ def person_list_view(request, slug, pk):
 
 def person_crud_view(request, slug, pk):
 	pass
+	
