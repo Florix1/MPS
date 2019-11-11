@@ -13,6 +13,7 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from django.conf.urls import include, url
 from django.contrib import admin
 from django.urls import path
 
@@ -27,6 +28,7 @@ from .views import (
     team_list_post_view,
     team_crud_post_view,
     team_post_detail_view,
+    team_post_delete_view,
     #person_list_view,
     #person_crud_view,
 )
@@ -51,8 +53,7 @@ urlpatterns = [
 
     path('contest/<str:slug>/team/<int:pk>/', team_post_detail_view),
     #//TODO for views.team update/delete
-    # path('contest/<str:slug>/team/<int:pk>/update/', ),
-    # path('contest/<str:slug>/team/<int:pk>/delete/', ),
+    path('contest/<str:slug>/team/<int:pk>/delete/', team_post_delete_view),
 
     #//TODO for Person
     #path('contest/<str:slug>/team/<int:pk>/person-list/', person_list_view),

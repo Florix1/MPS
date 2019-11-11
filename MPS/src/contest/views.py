@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.forms import inlineformset_factory
@@ -13,6 +14,7 @@ from contestapp.models import (
 
 # Contest ===================================================================
 
+@login_required(login_url='/admin')
 def contest_post_list_view(request):
 	qs = Contest.objects.all()
 	template_name	= 'contest/list.html'
@@ -20,6 +22,7 @@ def contest_post_list_view(request):
 	return render(request, template_name, context)
 
 
+@login_required(login_url='/admin')
 def contest_post_create_view(request):
 	form = ContestPostModelForm(request.POST or None)
 	if form.is_valid():
@@ -30,6 +33,7 @@ def contest_post_create_view(request):
 	return render(request, template_name, context)
 
 
+@login_required(login_url='/admin')
 def contest_post_detail_view(request, slug):
 	obj = get_object_or_404(Contest, slug=slug)
 	template_name	= 'contest/details.html'
@@ -37,6 +41,7 @@ def contest_post_detail_view(request, slug):
 	return render(request, template_name, context)
 
 
+@login_required(login_url='/admin')
 def contest_post_update_view(request, slug):
 	obj = get_object_or_404(Contest, slug=slug)
 	form = ContestPostModelForm(request.POST or None, instance=obj)
@@ -47,6 +52,7 @@ def contest_post_update_view(request, slug):
 	return render(request, template_name, context)
 
 
+@login_required(login_url='/admin')
 def contest_post_delete_view(request, slug):
 	obj = get_object_or_404(Contest, slug=slug)
 	template_name	= 'contests/delete.html'
@@ -60,6 +66,7 @@ def contest_post_delete_view(request, slug):
 
 # Category  =================================================================
 
+@login_required(login_url='/admin')
 def category_crud_post_view(request, slug):
 	obj 				= get_object_or_404(Contest, slug=slug)
 	template_name		= 'category/crud.html'
@@ -76,6 +83,7 @@ def category_crud_post_view(request, slug):
 	return render(request, template_name, context)
 
 
+@login_required(login_url='/admin')
 def category_post_list_view(request, slug):
 	qs = Category.objects.filter(contest__slug=slug)
 	template_name	= 'category/list.html'
@@ -84,6 +92,7 @@ def category_post_list_view(request, slug):
 
 # Team ======================================================================
 
+@login_required(login_url='/admin')
 def team_list_post_view(request, slug):
 	qs = Team.objects.filter(contest__slug=slug)
 	template_name	= 'team/list.html'
@@ -91,6 +100,7 @@ def team_list_post_view(request, slug):
 	return render(request, template_name, context)
 
 
+@login_required(login_url='/admin')
 def team_crud_post_view(request, slug):
 	obj 				= get_object_or_404(Contest, slug=slug)
 	template_name		= 'team/crud.html'
@@ -105,6 +115,8 @@ def team_crud_post_view(request, slug):
 	context 		= {'formset': formset}
 	return render(request, template_name, context)
 
+
+@login_required(login_url='/admin')
 def team_post_detail_view(request, slug, pk):
 	obj = get_object_or_404(Team, contest__slug=slug, pk=pk)
 	template_name	= 'team/details.html'
@@ -112,6 +124,18 @@ def team_post_detail_view(request, slug, pk):
 	return render(request, template_name, context)
 
 #//TODO update and delete just like contest but with pk as parameter
+
+
+@login_required(login_url='/admin')
+def team_post_delete_view(request, slug, pk):
+	obj = get_object_or_404(Contest, contest__slug=slug, pk=pk)
+	template_name	= 'team/delete.html'
+	context 		= {'object': obj}
+	if request.method == "POST":
+		obj.delete()
+		return redirect("/")
+	return render(request, template_name, context)
+
 
 # Grade =====================================================================
 
