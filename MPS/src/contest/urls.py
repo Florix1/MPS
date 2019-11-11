@@ -29,8 +29,8 @@ from .views import (
     team_crud_post_view,
     team_post_detail_view,
     team_post_delete_view,
-    #person_list_view,
-    #person_crud_view,
+    person_list_view,
+    person_crud_view,
 )
 
 
@@ -52,10 +52,8 @@ urlpatterns = [
     path('contest/<str:slug>/team-new/', team_crud_post_view),
 
     path('contest/<str:slug>/team/<int:pk>/', team_post_detail_view),
-    #//TODO for views.team update/delete
     path('contest/<str:slug>/team/<int:pk>/delete/', team_post_delete_view),
 
-    #//TODO for Person
-    #path('contest/<str:slug>/team/<int:pk>/person-list/', person_list_view),
-    #path('contest/<str:slug>/team/<int:pk>/person-new/', person_crud_view),
+    path('contest/<str:slug>/team/<int:pk>/person-list/', person_list_view),
+    path('contest/<str:slug>/team/<int:pk>/person-new/', person_crud_view),
 ]
