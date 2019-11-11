@@ -47,7 +47,7 @@ def contest_post_update_view(request, slug):
 	form = ContestPostModelForm(request.POST or None, instance=obj)
 	if form.is_valid():
 		form.save()
-	template_name	= 'contest/form.html'
+	template_name	= 'contest/update.html'
 	context 		= {'form': form}
 	return render(request, template_name, context)
 

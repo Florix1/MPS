@@ -3,7 +3,7 @@
 
 
 {% block content %}
-    <h1>Are you sure you want to delete {{object.title}} ?</h1>
+    <h1 style="color: white;">Are you sure you want to delete "{{object.title}}"?</h1>
 
 <form method='POST'> {%csrf_token %}
 	
