@@ -10,8 +10,11 @@ class ContestPostModelForm(forms.ModelForm):
 		fields = ['title', 'teamCount', 'membersPerTeam']
 
 	def clean_title(self, *args, **kwargs):
+		instance = self.instance
 		title = self.cleaned_data.get('title')
 		qs = Contest.objects.filter(title__iexact=title)
+		if instance is not None:
+			qs = qs.exclude(pk=instance.pk)
 		if qs.exists():
 			raise forms.ValidationError("This contest title has already been used.\nPlease try again.")
 		return title
@@ -34,8 +37,11 @@ class TeamPostModelForm(forms.ModelForm):
 		fields = ['teamName', 'isDisqualified', 'isStillCompeting', 'contest']
 
 	def clean_teamName(self, *args, **kwargs):
+		instance = self.instance
 		teamName = self.cleaned_data.get('teamName')
 		qs = Team.objects.filter(title__iexact=teamName)
+		if instance is not None:
+			qs = qs.exclude(pk=instance.pk)
 		if qs.exists():
 			raise forms.ValidationError("This team name has already been used.\nPlease try again.")
 		return teamName

@@ -113,6 +113,16 @@ def team_post_detail_view(request, slug, pk):
 
 #//TODO update and delete just like contest but with pk as parameter
 
+def team_post_delete_view(request, slug, pk):
+	obj = get_object_or_404(Contest, contest__slug=slug, pk=pk)
+	template_name	= 'team/delete.html'
+	context 		= {'object': obj}
+	if request.method == "POST":
+		obj.delete()
+		return redirect("/")
+	return render(request, template_name, context)
+
+
 # Grade =====================================================================
 
 #  team-category or category-team
