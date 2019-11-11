@@ -3,10 +3,11 @@
 
 
 {% block content %}
-    <h1>About</h1>
+    <h1 style="color: white;">About</h1>
     <p style="color: white;">Title: {{ object.title }}</p>
-    <p style="color: white;">TeamCount: {{ object.teamCount }} </p>
-    <p style="color: white;">MembersPerTeam: {{ object.membersPerTeam }} </p>
-    <a href='{{ object.get_edit_url }}'>Edit</a>
-	<a href='{{ object.get_delete_url }}'>Delete</a>
+    <p style="color: white;">Number of Teams: {{ object.teamCount }} </p>
+    <p style="color: white;">Members per Team: {{ object.membersPerTeam }} </p>
+
+<button class="btn btn3 " role="button"> <a href='{{ object.get_edit_url }}'>Edit</a></button>
+	<button class="btn btn4 " role="button"> <a href='{{ object.get_delete_url }}'>Delete</a></button>
 {% endblock %}
