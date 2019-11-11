@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+
+
+{% block content %}
+    <h1>Details of the team</h1>
+    <p>TeamName : {{ object.teamName }}</p>
+    <!--a href='{{ object.get_edit_url }}'>Edit</a>
+	<a href='{{ object.get_delete_url }}'>Delete</a-->
+{% endblock %}

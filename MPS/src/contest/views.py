@@ -105,10 +105,24 @@ def team_crud_post_view(request, slug):
 	context 		= {'formset': formset}
 	return render(request, template_name, context)
 
+def team_post_detail_view(request, slug, pk):
+	obj = get_object_or_404(Team, contest__slug=slug, pk=pk)
+	template_name	= 'team/details.html'
+	context 		= {'object': obj}
+	return render(request, template_name, context)
+
+#//TODO update and delete just like contest but with pk as parameter
 
 # Grade =====================================================================
 
-#//TODO team-category or category-team
+#  team-category or category-team
 
 # Person ====================================================================
 
+#//TODO same as category just takes slug and pk as parameters
+
+def person_list_view(request, slug, pk):
+	pass
+
+def person_crud_view(request, slug, pk):
+	pass
