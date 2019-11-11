@@ -1,6 +1,6 @@
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
-
+from django.forms import inlineformset_factory
 from .forms import ContestPostModelForm
 
 from contestapp.models import (
@@ -58,10 +58,71 @@ def contest_post_delete_view(request, slug):
 
 
 
-# Category ===================================================================
+# Category  =================================================================
+
+def category_crud_post_view(request, slug):
+	obj 				= get_object_or_404(Contest, slug=slug)
+	template_name		= 'category/crud.html'
+	CategoryFormset		= inlineformset_factory(Contest, Category, fields=('name',), can_delete=True, extra=1, max_num=15)
+	
+	if request.method == 'POST':
+		formset = CategoryFormset(request.POST, instance=obj)
+		if formset.is_valid():
+			formset.save()
+			return redirect(category_crud_post_view, slug=slug)
+
+	formset 			= CategoryFormset(instance=obj)
+	context 			= {'formset': formset}
+	return render(request, template_name, context)
 
 
-# Team ===================================================================
+def category_post_list_view(request, slug):
+	qs = Category.objects.filter(contest__slug=slug)
+	template_name	= 'category/list.html'
+	context 		= {'object_list': qs}
+	return render(request, template_name, context)
+
+# Team ======================================================================
+
+def team_list_post_view(request, slug):
+	qs = Team.objects.filter(contest__slug=slug)
+	template_name	= 'team/list.html'
+	context 		= {'object_list': qs}
+	return render(request, template_name, context)
 
 
-# Grade ===================================================================
+def team_crud_post_view(request, slug):
+	obj 				= get_object_or_404(Contest, slug=slug)
+	template_name		= 'team/crud.html'
+	TeamFormset			= inlineformset_factory(Contest, Team, fields=('teamName',), can_delete=True, extra=1, max_num=obj.membersPerTeam)
+	
+	if request.method == 'POST':
+		formset = TeamFormset(request.POST, instance=obj)
+		if formset.is_valid():
+			formset.save()
+			return redirect(team_crud_post_view, slug=slug)
+	formset 		= TeamFormset(instance=obj)
+	context 		= {'formset': formset}
+	return render(request, template_name, context)
+
+def team_post_detail_view(request, slug, pk):
+	obj = get_object_or_404(Team, contest__slug=slug, pk=pk)
+	template_name	= 'team/details.html'
+	context 		= {'object': obj}
+	return render(request, template_name, context)
+
+#//TODO update and delete just like contest but with pk as parameter
+
+# Grade =====================================================================
+
+#  team-category or category-team
+
+# Person ====================================================================
+
+#//TODO same as category just takes slug and pk as parameters
+
+def person_list_view(request, slug, pk):
+	pass
+
+def person_crud_view(request, slug, pk):
+	pass
