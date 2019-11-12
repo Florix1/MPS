@@ -9,5 +9,6 @@
 			{{ object.name}} {{object.age}}
 		</li>
 	{% endfor %}
+	<a href="{{ request.META.HTTP_REFERER }}" class="btn btn-primary" class>Back to Team Page</a>
 
 {% endblock %}

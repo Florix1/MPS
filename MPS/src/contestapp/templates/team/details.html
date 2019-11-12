@@ -5,6 +5,8 @@
 {% block content %}
     <h1 style="font-family: Candara; color: white;">Details of the team</h1>
 <p style="font-family: Candara; color: white;"><b>Name of the Team: </b> <i>{{ object.teamName }}</i></p>
-    <!--a href='{{ object.get_edit_url }}'>Edit</a>
-	<a href='{{ object.get_delete_url }}'>Delete</a-->
+	<a href="{{ request.META.HTTP_REFERER }}" class="btn btn-primary" class>Back to Team List</a>
+    <a type="button" class="btn btn4 btn-lg" style="color: black;" href='{{ object.get_delete_url }}/delete'>Delete</a></button>
+    <a type="button" class="btn btn5 btn-lg" style="color: black;" href='{{ object.get_absolute_url }}/person-new'>Create Person</a></button>
+    <a type="button" class="btn btn5 btn-lg" style="color: black;" href='{{ object.get_absolute_url }}/person-list'>Person List</a></button>
 {% endblock %}
