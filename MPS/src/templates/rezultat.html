@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+
+
+{% block content %}
+	<h1>
+		 {{ object.teamName }}
+	</h1>
+
+    {% for object in object_list %}
+		<li>
+			<h1>
+				{{ winners.name}} {{winners.age}}
+			</h1>
+		</li>
+	{% endfor %}
+{% endblock %}
