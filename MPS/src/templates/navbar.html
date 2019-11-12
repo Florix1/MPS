@@ -11,7 +11,9 @@
     <div id="navbarNew">
         <ul class="navbar-nav mx-auto">
             <li class="nav-item">
-                <a class="btn btn-outline-success" href="/contest-new/" role="button">Create New Contest</a>
+                {% if request.user.is_superuser %}
+                    <a class="btn btn-outline-success" href="/contest-new/" role="button">Create New Contest</a>
+                {% endif %}
             </li>
         </ul>
     </div>
