@@ -53,10 +53,9 @@ class Grade(models.Model):
 	grade				=	models.PositiveIntegerField(default=0)
 	postedBy			=	models.ForeignKey(User, on_delete=models.CASCADE)
 	teamName 			=   models.ManyToManyField(Team)
-	roundNumber			=	models.PositiveIntegerField()
-
-	def __str__(self):
-		return 'Nota_' + self.teamName + '_' + self.categoryName
+	roundNumber			=	models.PositiveIntegerField(default=1)
+	bonus				=	models.PositiveIntegerField(default=0)
+	comment				=	models.CharField(max_length=60, default='')
 
 class Person(models.Model):
 	name 				=	models.CharField(max_length=30)

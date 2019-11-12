@@ -138,13 +138,32 @@ def team_post_delete_view(request, slug, pk):
 # Grade =====================================================================
 
 @login_required(login_url='admin/login/?next=/')
-def grade_post_create_view(request):
+def grade_create_view(request):
 	form = ContestPostModelForm(request.POST or None)
 	if form.is_valid():
 		form.save()
 		form = ContestPostModelForm()
 	template_name	= 'contest/form.html'
 	context 		= {'form': form}
+	return render(request, template_name, context)
+
+
+@login_required(login_url='admin/login/?next=/')
+def grade_crud_view(request, slug, pk, c_pk):
+	obj 				= get_object_or_404(Category, pk=c_pk)
+	template_name		= 'grade/crud.html'
+	GradeFormset		= inlineformset_factory(Category, Grade, fields=('grade','comment','bonus'),can_delete=True, max_num=1)
+	
+	if request.method == 'POST':
+		formset = GradeFormset(request.POST, instance=obj)
+		if formset.is_valid():
+			instances = formset.save(commit=False)
+			for instance in instances:
+				instance.postedBy = request.user
+				instance.save()
+			return redirect(grade_crud_view, slug=slug, pk=pk, c_pk=c_pk)
+	formset 		= GradeFormset(instance=obj)
+	context 		= {'formset': formset}
 	return render(request, template_name, context)
 
 # Person ====================================================================
