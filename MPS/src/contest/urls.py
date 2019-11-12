@@ -31,6 +31,7 @@ from .views import (
     team_post_delete_view,
     person_list_view,
     person_crud_view,
+    grade_crud_view,
 )
 
 
@@ -50,10 +51,11 @@ urlpatterns = [
 
     path('contest/<str:slug>/team-list/', team_list_post_view),
     path('contest/<str:slug>/team-new/', team_crud_post_view),
-
+    path('contest/<str:slug>/team/<int:pk>/categ/<int:c_pk>/', grade_crud_view),
     path('contest/<str:slug>/team/<int:pk>/', team_post_detail_view),
     path('contest/<str:slug>/team/<int:pk>/delete/', team_post_delete_view),
 
     path('contest/<str:slug>/team/<int:pk>/person-list/', person_list_view),
     path('contest/<str:slug>/team/<int:pk>/person-new/', person_crud_view),
+
 ]
