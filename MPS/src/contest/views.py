@@ -90,6 +90,13 @@ def category_post_list_view(request, slug):
     context         = {'object_list': qs}
     return render(request, template_name, context)
 
+@login_required(login_url='admin/login/?next=/')
+def category_post_list_view1(request, slug, pk):
+    qs = Category.objects.filter(contest__slug=slug)
+    template_name    = 'category/list1.html'
+    context         = {'object_list': qs, 'slug':slug , 'pk': pk}
+    return render(request, template_name, context)
+
 # Team ======================================================================
 
 @login_required(login_url='admin/login/?next=/')
