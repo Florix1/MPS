@@ -8,11 +8,16 @@
 <p style="font-family: Candara; color: white;"><b>Number of Teams: </b> <i>{{ object.teamCount }}</i></p>
 <p style="font-family: Candara; color: white;"><b>Members per Team: </b> <i>{{ object.membersPerTeam }}</i></p>
 
-<a type="button" class="btn btn3 btn-lg" style="color: black;" href='{{ object.get_edit_url }}'>Edit</a></button>
-<a type="button" class="btn btn4 btn-lg" style="color: black;" href='{{ object.get_delete_url }}'>Delete</a></button>
-<a type="button" class="btn btn5 btn-lg" style="color: black;" href='{{ object.get_absolute_url }}/category-new'>Create Category</a></button>
-<a type="button" class="btn btn6 btn-lg" style="color: black;" href='{{ object.get_absolute_url }}/category-list'>Category List</a></button>
-<a type="button" class="btn btn5 btn-lg" style="color: black;" href='{{ object.get_absolute_url }}/team-new'>Create Team</a></button>
-<a type="button" class="btn btn6 btn-lg" style="color: black;" href='{{ object.get_absolute_url }}/team-list'>Team List</a></button>
+{% if request.user.is_superuser %}
+	<a type="button" class="btn btn3 btn-lg" style="color: black;" href='{{ object.get_edit_url }}'>Edit</a></button>
+	<a type="button" class="btn btn4 btn-lg" style="color: black;" href='{{ object.get_delete_url }}'>Delete</a></button>
+	<a type="button" class="btn btn5 btn-lg" style="color: black;" href='{{ object.get_absolute_url }}/category-new'>Create Category</a></button>
+	<a type="button" class="btn btn6 btn-lg" style="color: black;" href='{{ object.get_absolute_url }}/category-list'>Category List</a></button>
+	<a type="button" class="btn btn5 btn-lg" style="color: black;" href='{{ object.get_absolute_url }}/team-new'>Create Team</a></button>
+	<a type="button" class="btn btn6 btn-lg" style="color: black;" href='{{ object.get_absolute_url }}/team-list'>Team List</a></button>
+{% else %}
+	<a type="button" class="btn btn6 btn-lg" style="color: black;" href='{{ object.get_absolute_url }}/category-list'>Category List</a></button>
+	<a type="button" class="btn btn6 btn-lg" style="color: black;" href='{{ object.get_absolute_url }}/team-list'>Team List</a></button>
+{% endif %}
 
 {% endblock %}
