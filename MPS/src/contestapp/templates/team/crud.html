@@ -3,7 +3,8 @@
 
 
 {% block content %}
-    <h1>Add your teams</h1>
+<a type="button" class="btn btn9 btn-lg" style="color: black;" href='{{ request.META.HTTP_REFERER }}'>Back to Contest Page</a>
+    <h1 style="font-family: Candara; color: white;">Add your teams</h1>
 
 
 <form method='POST' action=''> {% csrf_token %}
@@ -12,6 +13,6 @@
 		{{ formset.as_p }}
 	</div>
 	<br><button type='submit' class="btn btn2 btn-lg">Update</button>
-		<a href="{{ request.META.HTTP_REFERER }}" class="btn btn-primary" class>Back to Contest Page</a>
+
 </form>
 {% endblock %}

@@ -3,7 +3,7 @@
 
 
 {% block content %}
-    
+<a type="button" class="btn btn9 btn-lg" style="color: black;" href='{{ request.META.HTTP_REFERER }}'>Back to Contest Page</a>
 	{% for object in object_list %}
 		<div class="container h-100" style="padding-top: 1%;">
 			<div class="d-flex h-100">
@@ -16,6 +16,5 @@
 
 	{% endfor %}
 
-	<a href="{{ request.META.HTTP_REFERER }}" class="btn btn-primary" class>Back to Contest Page</a>
 
 {% endblock %}

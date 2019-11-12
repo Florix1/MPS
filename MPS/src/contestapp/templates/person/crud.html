@@ -3,12 +3,12 @@
 
 
 {% block content %}
-    <h1>Add your wanted categories</h1>
-
+<a type="button" class="btn btn9 btn-lg" style="color: black;" href='{{ request.META.HTTP_REFERER }}'>Back to Team List</a>
+    <h1 style="font-family: Candara; color: white;">Add your wanted categories</h1>
 
 <form method='POST' action=''> {% csrf_token %}
 		{{ formset.as_p }}
-	<button type='submit'>Update</button>
+	<br><button type='submit' class="btn btn2 btn-lg">Update</button>
 </form>
-<a href="{{ request.META.HTTP_REFERER }}" class="btn btn-primary" class>Back to Team Page</a>
+
 {% endblock %}
