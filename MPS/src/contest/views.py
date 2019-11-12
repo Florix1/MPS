@@ -97,8 +97,6 @@ def category_post_list_view1(request, slug, pk):
     context         = {'object_list': qs, 'slug':slug , 'pk': pk}
     return render(request, template_name, context)
 
-	return render(request, template_name, context)
-
 # Team ======================================================================
 
 @login_required(login_url='admin/login/?next=/')
