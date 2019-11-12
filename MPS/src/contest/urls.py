@@ -66,7 +66,6 @@ urlpatterns = [
     path('contest/<str:slug>/team/<int:pk>/person-new/', person_crud_view),
 
     path('contest/<str:slug>/team/<int:pk>/category-list/', category_post_list_view1),
-
     path('contest/<str:slug>/rezultat',magic_button),
 
 

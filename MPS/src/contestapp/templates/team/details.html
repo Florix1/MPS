@@ -12,11 +12,11 @@
 
 {% if request.user.is_superuser %}
     <a type="button" class="btn btn4 btn-lg" style="color: black;" href='{{ object.get_delete_url }}/delete'>Delete</a></button>
-    <a type="button" class="btn btn5 btn-lg" style="color: black;" href='{{ object.get_absolute_url }}/person-new'>Create Person</a></button>
-    <a type="button" class="btn btn6 btn-lg" style="color: black;" href='{{ object.get_absolute_url }}/person-list'>Person List</a></button>
+    <a type="button" class="btn btn5 btn-lg" style="color: black;" href='{{ object.get_absolute_url }}/person-new'>Add Member</a></button>
+    <a type="button" class="btn btn6 btn-lg" style="color: black;" href='{{ object.get_absolute_url }}/person-list'>Members List</a></button>
     <a type="button" class="btn btn6 btn-lg" style="color: black;" href='{{ object.get_absolute_url }}/category-list'>Category List</a></button>
 {% else %}
-	<a type="button" class="btn btn6 btn-lg" style="color: black;" href='{{ object.get_absolute_url }}/person-list'>Person List</a></button>
+	<a type="button" class="btn btn6 btn-lg" style="color: black;" href='{{ object.get_absolute_url }}/person-list'>Members List</a></button>
 	<a type="button" class="btn btn6 btn-lg" style="color: black;" href='{{ object.get_absolute_url }}/category-list'>Category List</a></button>
 {% endif %}
 {% endblock %}
