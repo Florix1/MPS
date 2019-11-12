@@ -7,8 +7,11 @@
 
 
 <form method='POST' action=''> {% csrf_token %}
+	
+	<div class="fieldWrapper" style="color: white;">
 		{{ formset.as_p }}
-	<button type='submit'>Update</button>
+	</div>
+	<br><button type='submit' class="btn btn2 btn-lg">Update</button>
 		<a href="{{ request.META.HTTP_REFERER }}" class="btn btn-primary" class>Back to Contest Page</a>
 </form>
 {% endblock %}

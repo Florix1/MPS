@@ -1,0 +1,58 @@
+1. SCOPUL DOCUMENTULUI
+
+Acest document are rolul de a descrie detaliat structura si componentele sistemului software, 
+mai precis detaliile de implementare necesare satisfacerii cerintelor specificate in documentul 
+Software Requirements Specification (SRS).
+Documentul faciliteaza intelegerea sistemului, oferind o vedere mai larga asupra proiectarii acestuia.
+In plus va oferi dezvoltatorilor o imagine de ansamblu a cerintelor
+pentru a le putea indeplini eficient. 
+
+2. OBIECTIVE
+
+Pentru a raspunde la intrebari precum “Cum va fi cunstruit sistemul software pentru a avea comportamentul
+descris in SRS?” acest document prezinta metodologiile, tehnologiile, participantii si resursele
+implicate in proiect. Totodata are scopul de a  analiza evolutia proiectului de
+la prima etapa (alegerea designului) pana la ultima etapa (aplicatia propriu-zisa).
+
+3. CONTINUTUL DOCUMENTULUI
+
+Documentul este format din patru sectiuni esentiale:
+• Modelul datelor – prezinta principalele structuri de date folosite, precum
+si schema bazei de date;
+• Modelul arhitectural si modelul componentelor – prezinta sabloanele
+arhitecturale folosite, arhitectura sistemului si descrie componentele arhitecturii;
+• Modelul interfetei cu utilizatorul – prezinta interfata cu utilizatorul si
+succesiunea ferestrelor acesteia;
+• Elemente de testare – prezinta componentele critice si alternative de
+proiectare a acestora.
+
+4. Diagrama
+
+5. MODELUL ARHITECTURAL
+5.1 SABLOANE ARHITECTURALE FOLOSITE
+Arhitectura folosita in aceasta aplicatie este una de tip front-end -
+back-end.
+Componenta front-end este o interfata user-frendly, ce face legatura intre
+utilizator si back-end. Componenta back-end ofera indirect sprijinul serviciilor
+front-end, aceasta facand diferite operatii a caror rezultat este returnat frontendului pentru a fi mai apoi afisat.
+Componentele front-end si back-end pot fi distribuite in unul sau mai multe
+sisteme.
+
+5.2 FORMA FINALA
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
