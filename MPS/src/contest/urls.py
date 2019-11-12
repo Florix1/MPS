@@ -32,6 +32,7 @@ from .views import (
     person_list_view,
     person_crud_view,
     grade_crud_view,
+    magic_button,
 )
 
 
@@ -57,5 +58,7 @@ urlpatterns = [
 
     path('contest/<str:slug>/team/<int:pk>/person-list/', person_list_view),
     path('contest/<str:slug>/team/<int:pk>/person-new/', person_crud_view),
+
+    path('contest/<str:slug>/rezultat',magic_button),
 
 ]
