@@ -6,7 +6,7 @@ from .forms import ContestPostModelForm
 
 from contestapp.models import (
         Contest,
-        # Team,
+        Team,
         # Category,
         # Grade,
         # Person,
@@ -97,49 +97,49 @@ def contest_post_delete_view(request, slug):
 #     context         = {'object_list': qs, 'slug':slug , 'pk': pk}
 #     return render(request, template_name, context)
 
-# # Team ======================================================================
+# Team ======================================================================
 
-# @login_required(login_url='admin/login/?next=/')
-# def team_list_post_view(request, slug):
-#     qs = Team.objects.filter(contest__slug=slug)
-#     template_name    = 'team/list.html'
-#     context         = {'object_list': qs}
-#     return render(request, template_name, context)
+@login_required(login_url='admin/login/?next=/')
+def team_list_post_view(request, slug):
+    qs = Team.objects.filter(contest__slug=slug)
+    template_name    = 'team/list.html'
+    context         = {'object_list': qs}
+    return render(request, template_name, context)
 
 
-# @login_required(login_url='admin/login/?next=/')
-# def team_crud_post_view(request, slug):
-#     obj                 = get_object_or_404(Contest, slug=slug)
-#     template_name        = 'team/crud.html'
-#     TeamFormset            = inlineformset_factory(Contest, Team, fields=('teamName',), can_delete=True, extra=1, max_num=obj.membersPerTeam)
+@login_required(login_url='admin/login/?next=/')
+def team_crud_post_view(request, slug):
+    obj                 = get_object_or_404(Contest, slug=slug)
+    template_name        = 'team/crud.html'
+    TeamFormset            = inlineformset_factory(Contest, Team, fields=('teamName',), can_delete=True, extra=1, max_num=obj.membersPerTeam)
     
-#     if request.method == 'POST':
-#         formset = TeamFormset(request.POST, instance=obj)
-#         if formset.is_valid():
-#             formset.save()
-#             return redirect(team_crud_post_view, slug=slug)
-#     formset         = TeamFormset(instance=obj)
-#     context         = {'formset': formset}
-#     return render(request, template_name, context)
+    if request.method == 'POST':
+        formset = TeamFormset(request.POST, instance=obj)
+        if formset.is_valid():
+            formset.save()
+            return redirect(team_crud_post_view, slug=slug)
+    formset         = TeamFormset(instance=obj)
+    context         = {'formset': formset}
+    return render(request, template_name, context)
 
 
-# @login_required(login_url='admin/login/?next=/')
-# def team_post_detail_view(request, slug, pk):
-#     obj = get_object_or_404(Team, contest__slug=slug, pk=pk)
-#     template_name    = 'team/details.html'
-#     context         = {'object': obj}
-#     return render(request, template_name, context)
+@login_required(login_url='admin/login/?next=/')
+def team_post_detail_view(request, slug, pk):
+    obj = get_object_or_404(Team, contest__slug=slug, pk=pk)
+    template_name    = 'team/details.html'
+    context         = {'object': obj}
+    return render(request, template_name, context)
 
 
-# @login_required(login_url='admin/login/?next=/')
-# def team_post_delete_view(request, slug, pk):
-#     obj = get_object_or_404(Contest, contest__slug=slug, pk=pk)
-#     template_name    = 'team/delete.html'
-#     context         = {'object': obj}
-#     if request.method == "POST":
-#         obj.delete()
-#         return redirect("/")
-#     return render(request, template_name, context)
+@login_required(login_url='admin/login/?next=/')
+def team_post_delete_view(request, slug, pk):
+    obj = get_object_or_404(Contest, contest__slug=slug, pk=pk)
+    template_name    = 'team/delete.html'
+    context         = {'object': obj}
+    if request.method == "POST":
+        obj.delete()
+        return redirect("/")
+    return render(request, template_name, context)
 
 
 # # Grade =====================================================================
