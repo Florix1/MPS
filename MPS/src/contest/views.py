@@ -7,7 +7,7 @@ from .forms import ContestPostModelForm
 from contestapp.models import (
         Contest,
         Team,
-        # Category,
+        Category,
         # Grade,
         Member,
     )
@@ -65,31 +65,31 @@ def contest_post_delete_view(request, slug):
     return render(request, template_name, context)
 
 
-# # Category  =================================================================
+# Category  =================================================================
 
-# @login_required(login_url='admin/login/?next=/')
-# def category_crud_post_view(request, slug):
-#     obj                 = get_object_or_404(Contest, slug=slug)
-#     template_name        = 'category/crud.html'
-#     CategoryFormset        = inlineformset_factory(Contest, Category, fields=('name',), can_delete=True, extra=1, max_num=15)
+@login_required(login_url='admin/login/?next=/')
+def category_crud_post_view(request, slug):
+    obj                 = get_object_or_404(Contest, slug=slug)
+    template_name        = 'category/crud.html'
+    CategoryFormset        = inlineformset_factory(Contest, Category, fields=('name',), can_delete=True, extra=1, max_num=15)
     
-#     if request.method == 'POST':
-#         formset = CategoryFormset(request.POST, instance=obj)
-#         if formset.is_valid():
-#             formset.save()
-#             return redirect(category_crud_post_view, slug=slug)
+    if request.method == 'POST':
+        formset = CategoryFormset(request.POST, instance=obj)
+        if formset.is_valid():
+            formset.save()
+            return redirect(category_crud_post_view, slug=slug)
 
-#     formset             = CategoryFormset(instance=obj)
-#     context             = {'formset': formset}
-#     return render(request, template_name, context)
+    formset             = CategoryFormset(instance=obj)
+    context             = {'formset': formset}
+    return render(request, template_name, context)
 
 
-# @login_required(login_url='admin/login/?next=/')
-# def category_post_list_view(request, slug):
-#     qs = Category.objects.filter(contest__slug=slug)
-#     template_name    = 'category/list.html'
-#     context         = {'object_list': qs}
-#     return render(request, template_name, context)
+@login_required(login_url='admin/login/?next=/')
+def category_post_list_view(request, slug):
+    qs = Category.objects.filter(contest__slug=slug)
+    template_name    = 'category/list.html'
+    context         = {'object_list': qs}
+    return render(request, template_name, context)
 
 # @login_required(login_url='admin/login/?next=/')
 # def category_post_list_view1(request, slug, pk):

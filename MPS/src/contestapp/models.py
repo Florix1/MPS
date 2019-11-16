@@ -77,20 +77,20 @@ class Team(models.Model):
 # # 	endSeries			=	
 
 
-# # ==============================================================================================================================
+# ==============================================================================================================================
 
 
-# class Category(models.Model):
-# 	name 				=	models.CharField(max_length=30)
-# 	percent				=	models.PositiveIntegerField(default=100)
-# 	# ========================= Hidden ==========================================
-# 	contest             =	models.ForeignKey('Contest', related_name='categories', on_delete=models.CASCADE)
+class Category(models.Model):
+	name 				=	models.CharField(max_length=30)
+	percent				=	models.PositiveIntegerField(default=100)
+	# ========================= Hidden ==========================================
+	contest             =	models.ForeignKey('Contest', related_name='categories', on_delete=models.CASCADE)
 
-# 	def __str__(self):
-# 		return self.name
+	def __str__(self):
+		return self.name
 
 
-# # ==============================================================================================================================
+# ==============================================================================================================================
 
 
 # class Grade(models.Model):

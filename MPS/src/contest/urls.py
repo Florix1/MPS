@@ -27,12 +27,11 @@ from .views import (
     team_crud_post_view,
     team_post_detail_view,
     team_post_delete_view,
-    # category_crud_post_view,
-    # category_post_list_view,
+    category_crud_post_view,
+    category_post_list_view,
     member_list_view,
     member_crud_view,
     # grade_crud_view,
-    # category_post_list_view1,
     # magic_button,
     # category_post_list_view1,
 )
@@ -53,10 +52,9 @@ urlpatterns = [
 
 # ============================================== Category ==============================================
 
-#     path('contest/<str:slug>/team/<int:pk>/category-list/', category_post_list_view1),
-
-#     path('contest/<str:slug>/category-new/', category_crud_post_view),
-#     path('contest/<str:slug>/category-list/', category_post_list_view),
+#   path('contest/<str:slug>/team/<int:pk>/category-list/', category_post_list_view1),
+    path('contest/<str:slug>/category-new/', category_crud_post_view),
+    path('contest/<str:slug>/category-list/', category_post_list_view),
 
 # ============================================== Team ==================================================
     
@@ -77,6 +75,6 @@ urlpatterns = [
 #     path('contest/<str:slug>/team/<int:pk>/category-list/', category_post_list_view1),
 #     path('contest/<str:slug>/rezultat',magic_button),
 
-# # ==============================================  ?? ===================================================
+# ==============================================  ?? ===================================================
 
 ]
