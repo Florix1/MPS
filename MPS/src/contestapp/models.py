@@ -12,13 +12,12 @@ class Contest(models.Model):
 	membersPerTeam			=	models.PositiveIntegerField()
 	typeOfContest			=	models.PositiveIntegerField(default=0)
 	numberOfRounds			=	models.PositiveIntegerField()
-	# ==================== Hidden ==========================================
+	# ========================= Hidden ==========================================
 	slug 					=	models.SlugField(unique=True)
 	canVote					=	models.BooleanField(default=False)
 	isStarted				=	models.BooleanField(default=False)
 	currentRound			=	models.PositiveIntegerField(default=0)
 	currentSeries			=	models.PositiveIntegerField(default=0)
-
 
 
 	def __str__(self):
@@ -39,7 +38,26 @@ class Contest(models.Model):
 		return f"/contest/{self.slug}/delete"
 
 
-# # ==============================================================================================================================
+# ==============================================================================================================================
+
+class Team(models.Model):
+	teamName			=	models.CharField(max_length=40)
+	numberOnBack		=	models.PositiveIntegerField()
+	# ========================= Hidden ==========================================
+	isDisqualified		=	models.BooleanField(default=False)
+	isStillCompeting	=	models.BooleanField(default=True)
+	contest 			=	models.ForeignKey('Contest', related_name='teams', on_delete=models.CASCADE)
+
+
+	def get_absolute_url(self):
+		return f"/contest/{self.contest.slug}/team/{self.pk}"
+
+	def __str__(self):
+		return self.teamName
+
+
+# ==============================================================================================================================
+
 
 
 # class Round(models.Model):
@@ -62,29 +80,10 @@ class Contest(models.Model):
 # # ==============================================================================================================================
 
 
-# class Team(models.Model):
-# 	teamName			=	models.CharField(max_length=40)
-# 	numberOnBack		=	models.PositiveIntegerField()
-# 	# ==================== Hidden ==========================================
-# 	isDisqualified		=	models.BooleanField(default=False)
-# 	isStillCompeting	=	models.BooleanField(default=True)
-# 	contest 			=	models.ForeignKey('Contest', related_name='teams', on_delete=models.CASCADE)
-
-
-# 	def get_absolute_url(self):
-# 		return f"/contest/{self.contest.slug}/team/{self.pk}"
-
-# 	def __str__(self):
-# 		return self.teamName
-
-
-# # ==============================================================================================================================
-
-
 # class Category(models.Model):
 # 	name 				=	models.CharField(max_length=30)
 # 	percent				=	models.PositiveIntegerField(default=100)
-# 	# ==================== Hidden ==========================================
+# 	# ========================= Hidden ==========================================
 # 	contest             =	models.ForeignKey('Contest', related_name='categories', on_delete=models.CASCADE)
 
 # 	def __str__(self):
@@ -100,7 +99,7 @@ class Contest(models.Model):
 # 	roundNumber			=	models.PositiveIntegerField(default=1)
 # 	bonus				=	models.PositiveIntegerField(default=0)
 # 	comment				=	models.CharField(max_length=80, default='')
-# 	# ==================== Hidden ==========================================
+# 	# ========================= Hidden ==========================================
 # 	teamName 			=   models.ForeignKey('Team', related_name='teams', on_delete=models.CASCADE)
 # 	categoryName 		=	models.ForeignKey('Category', related_name='grades', on_delete=models.CASCADE)
 
@@ -113,7 +112,7 @@ class Contest(models.Model):
 # 	officialName 		=	models.CharField(max_length=25)
 # 	stageName			=	models.CharField(max_length=30)
 # 	age 				=	models.PositiveIntegerField()
-# 	# ==================== Hidden ==========================================
+# 	# ========================= Hidden ==========================================
 # 	team 				=	models.ForeignKey('Team', related_name='people', on_delete=models.CASCADE)
 
 # 	def __str__(self):
