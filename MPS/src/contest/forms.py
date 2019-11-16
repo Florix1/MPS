@@ -34,7 +34,7 @@ class ContestPostModelForm(forms.ModelForm):
 class TeamPostModelForm(forms.ModelForm):
 	class Meta:
 		model = Team
-		fields = ['teamName', 'isDisqualified', 'isStillCompeting', 'contest']
+		fields = ['teamName', 'numberOnBack']
 
 	def clean_teamName(self, *args, **kwargs):
 		instance = self.instance

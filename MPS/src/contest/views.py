@@ -111,7 +111,7 @@ def team_list_post_view(request, slug):
 def team_crud_post_view(request, slug):
     obj                 = get_object_or_404(Contest, slug=slug)
     template_name        = 'team/crud.html'
-    TeamFormset            = inlineformset_factory(Contest, Team, fields=('teamName',), can_delete=True, extra=1, max_num=obj.membersPerTeam)
+    TeamFormset            = inlineformset_factory(Contest, Team, fields=('teamName', 'numberOnBack'), can_delete=True, extra=1, max_num=obj.membersPerTeam)
     
     if request.method == 'POST':
         formset = TeamFormset(request.POST, instance=obj)

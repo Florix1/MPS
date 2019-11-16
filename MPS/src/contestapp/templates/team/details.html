@@ -6,6 +6,7 @@
 <a type="button" class="btn btn9 btn-lg" style="color: black;" href='{{ request.META.HTTP_REFERER }}'>Back to Team List</a>
     <h1 style="font-family: Candara; color: white;">Details of the team</h1>
 <p style="font-family: Candara; color: white;"><b>Name of the Team: </b> <i>{{ object.teamName }}</i></p>
+<p style="font-family: Candara; color: white;"><b>Number of the Team: </b> <i>{{ object.numberOnBack }}</i></p>
 {% if request.user.is_superuser %}
 	<p style="font-family: Candara; color: white;"><b>Team is disqualified: </b> <i>{{ object.isDisqualified }}</i></p>
 {% endif %}
