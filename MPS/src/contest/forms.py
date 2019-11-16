@@ -1,8 +1,8 @@
 from django import forms
 
 from contestapp.models import Contest
-from contestapp.models import Team
-from contestapp.models import Grade
+# from contestapp.models import Team
+# from contestapp.models import Grade
 
 class ContestPostModelForm(forms.ModelForm):
 	class Meta:
@@ -31,28 +31,28 @@ class ContestPostModelForm(forms.ModelForm):
 			raise forms.ValidationError("Must be a number between 2 and 5.\nPlease try again")
 		return membersPerTeam
 
-class TeamPostModelForm(forms.ModelForm):
-	class Meta:
-		model = Team
-		fields = ['teamName', 'isDisqualified', 'isStillCompeting', 'contest']
+# class TeamPostModelForm(forms.ModelForm):
+# 	class Meta:
+# 		model = Team
+# 		fields = ['teamName', 'isDisqualified', 'isStillCompeting', 'contest']
 
-	def clean_teamName(self, *args, **kwargs):
-		instance = self.instance
-		teamName = self.cleaned_data.get('teamName')
-		qs = Team.objects.filter(title__iexact=teamName)
-		if instance is not None:
-			qs = qs.exclude(pk=instance.pk)
-		if qs.exists():
-			raise forms.ValidationError("This team name has already been used.\nPlease try again.")
-		return teamName
+# 	def clean_teamName(self, *args, **kwargs):
+# 		instance = self.instance
+# 		teamName = self.cleaned_data.get('teamName')
+# 		qs = Team.objects.filter(title__iexact=teamName)
+# 		if instance is not None:
+# 			qs = qs.exclude(pk=instance.pk)
+# 		if qs.exists():
+# 			raise forms.ValidationError("This team name has already been used.\nPlease try again.")
+# 		return teamName
 
-class GradePostModelForm(forms.ModelForm):
-	class Meta:
-		model = Grade
-		fields = ['categoryName', 'grade', 'postedBy', 'teamName', 'roundNumber']
+# class GradePostModelForm(forms.ModelForm):
+# 	class Meta:
+# 		model = Grade
+# 		fields = ['categoryName', 'grade', 'postedBy', 'teamName', 'roundNumber']
 
-	def clean_grade(self, *args, **kwargs):
-		grade = self.cleaned_data.get('grade')
-		if grade < 0 or grade > 10:
-			raise forms.ValidationError("Grade is not valid.\nPlease try again")
-		return grade
+# 	def clean_grade(self, *args, **kwargs):
+# 		grade = self.cleaned_data.get('grade')
+# 		if grade < 0 or grade > 10:
+# 			raise forms.ValidationError("Grade is not valid.\nPlease try again")
+# 		return grade
