@@ -9,10 +9,12 @@ from contestapp.models import (
         Team,
         # Category,
         # Grade,
-        # Person,
+        Member,
     )
 
+
 # Contest ===================================================================
+
 
 @login_required(login_url='admin/login/?next=/')
 def contest_post_list_view(request):
@@ -63,7 +65,6 @@ def contest_post_delete_view(request, slug):
     return render(request, template_name, context)
 
 
-
 # # Category  =================================================================
 
 # @login_required(login_url='admin/login/?next=/')
@@ -98,6 +99,7 @@ def contest_post_delete_view(request, slug):
 #     return render(request, template_name, context)
 
 # Team ======================================================================
+
 
 @login_required(login_url='admin/login/?next=/')
 def team_list_post_view(request, slug):
@@ -144,6 +146,7 @@ def team_post_delete_view(request, slug, pk):
 
 # # Grade =====================================================================
 
+
 # @login_required(login_url='admin/login/?next=/')
 # def grade_create_view(request):
 #     form = ContestPostModelForm(request.POST or None)
@@ -173,33 +176,33 @@ def team_post_delete_view(request, slug, pk):
 #     context         = {'formset': formset}
 #     return render(request, template_name, context)
 
-# # Person ====================================================================
 
-# #//TODO same as category just takes slug and pk as parameters
+# Member ====================================================================
 
-# @login_required(login_url='admin/login/?next=/')
-# def person_crud_view(request, slug, pk):
-#     obj                 = get_object_or_404(Team, pk=pk)
-#     template_name        = 'person/crud.html'
-#     PersonFormset        = inlineformset_factory(Team, Person, fields=('name','age',), can_delete=True, extra=1, max_num=obj.contest.membersPerTeam)
+
+@login_required(login_url='admin/login/?next=/')
+def member_crud_view(request, slug, pk):
+    obj 				 = get_object_or_404(Team, pk=pk)
+    template_name        = 'member/crud.html'
+    MemberFormset        = inlineformset_factory(Team, Member, fields=('officialSurname','officialName','stageName','age',), can_delete=True, extra=1, max_num=obj.contest.membersPerTeam)
     
-#     if request.method == 'POST':
-#         formset = PersonFormset(request.POST, instance=obj)
-#         if formset.is_valid():
-#             formset.save()
-#             return redirect(person_crud_view, slug=slug, pk=pk)
+    if request.method == 'POST':
+        formset = MemberFormset(request.POST, instance=obj)
+        if formset.is_valid():
+            formset.save()
+            return redirect(member_crud_view, slug=slug, pk=pk)
 
-#     formset             = PersonFormset(instance=obj)
-#     context             = {'formset': formset}
-#     return render(request, template_name, context)
+    formset             = MemberFormset(instance=obj)
+    context             = {'formset': formset}
+    return render(request, template_name, context)
 
 
-# @login_required(login_url='admin/login/?next=/')
-# def person_list_view(request, slug, pk):
-#     qs = Person.objects.filter(team__pk=pk)
-#     template_name    = 'person/list.html'
-#     context         = {'object_list': qs, 'pk':pk}
-#     return render(request, template_name, context)
+@login_required(login_url='admin/login/?next=/')
+def member_list_view(request, slug, pk):
+    qs = Member.objects.filter(team__pk=pk)
+    template_name    = 'member/list.html'
+    context         = {'object_list': qs, 'pk':pk}
+    return render(request, template_name, context)
 
 
 # # Extra =================================================================================================
@@ -221,7 +224,7 @@ def team_post_delete_view(request, slug, pk):
 #                  if v[team.pk] > maxim:
 #                     answer = team
 #                     maxim = v[team.pk]
-#     winners = Person.objects.filter(team__pk=answer.pk)
+#     winners = Member.objects.filter(team__pk=answer.pk)
 #     template_name   = 'rezultat.html'
 #     context         = {'object': answer, 'winners': winners, 'score' : maxim}
 #     return render(request, template_name, context)

@@ -104,20 +104,20 @@ class Team(models.Model):
 # 	categoryName 		=	models.ForeignKey('Category', related_name='grades', on_delete=models.CASCADE)
 
 
-# # ==============================================================================================================================
+# ==============================================================================================================================
 
 
-# class Member(models.Model):
-# 	officialSurname 	=	models.CharField(max_length=25)
-# 	officialName 		=	models.CharField(max_length=25)
-# 	stageName			=	models.CharField(max_length=30)
-# 	age 				=	models.PositiveIntegerField()
-# 	# ========================= Hidden ==========================================
-# 	team 				=	models.ForeignKey('Team', related_name='people', on_delete=models.CASCADE)
+class Member(models.Model):
+	officialSurname 	=	models.CharField(max_length=25)
+	officialName 		=	models.CharField(max_length=25)
+	stageName			=	models.CharField(max_length=30)
+	age 				=	models.PositiveIntegerField()
+	# ========================= Hidden ==========================================
+	team 				=	models.ForeignKey('Team', related_name='people', on_delete=models.CASCADE)
 
-# 	def __str__(self):
-# 		return self.name
+	def __str__(self):
+		return self.name
 
 
-# # ==============================================================================================================================
+# ==============================================================================================================================
 

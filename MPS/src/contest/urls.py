@@ -29,8 +29,8 @@ from .views import (
     team_post_delete_view,
     # category_crud_post_view,
     # category_post_list_view,
-    # person_list_view,
-    # person_crud_view,
+    member_list_view,
+    member_crud_view,
     # grade_crud_view,
     # category_post_list_view1,
     # magic_button,
@@ -65,12 +65,14 @@ urlpatterns = [
     path('contest/<str:slug>/team/<int:pk>/', team_post_detail_view),
     path('contest/<str:slug>/team/<int:pk>/delete/', team_post_delete_view),
 
+# ============================================== Member ==================================================
+
+    path('contest/<str:slug>/team/<int:pk>/member-list/', member_list_view),
+    path('contest/<str:slug>/team/<int:pk>/member-new/', member_crud_view),
+
 # # ==============================================  ?? ===================================================
 
 #     path('contest/<str:slug>/team/<int:pk>/categ/<int:c_pk>/', grade_crud_view),
-
-#     path('contest/<str:slug>/team/<int:pk>/person-list/', person_list_view),
-#     path('contest/<str:slug>/team/<int:pk>/person-new/', person_crud_view),
 
 #     path('contest/<str:slug>/team/<int:pk>/category-list/', category_post_list_view1),
 #     path('contest/<str:slug>/rezultat',magic_button),
