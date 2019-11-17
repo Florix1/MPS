@@ -10,6 +10,7 @@ from contestapp.models import (
         Category,
         # Grade,
         Member,
+        Round,
     )
 
 
@@ -63,6 +64,21 @@ def contest_post_delete_view(request, slug):
         obj.delete()
         return redirect("/")
     return render(request, template_name, context)
+
+@login_required(login_url='admin/login/?next=/')
+def start_contest_view(request, slug):
+    obj = get_object_or_404(Contest, slug=slug)
+    obj.isStarted    = True
+    obj.canVote        = True
+    for i in range(obj.numberOfRounds):
+        rnd         = Round()
+        rnd.number                =    i + 1
+        rnd.contest             =   obj
+        rnd.save()
+    template_name   = 'contest/start.html'
+    context         = {'object': obj}
+    return render(request, template_name, context)
+
 
 
 # Category  =================================================================
@@ -143,7 +159,6 @@ def team_post_delete_view(request, slug, pk):
         return redirect("/")
     return render(request, template_name, context)
 
-
 # # Grade =====================================================================
 
 
@@ -182,7 +197,7 @@ def team_post_delete_view(request, slug, pk):
 
 @login_required(login_url='admin/login/?next=/')
 def member_crud_view(request, slug, pk):
-    obj 				 = get_object_or_404(Team, pk=pk)
+    obj                  = get_object_or_404(Team, pk=pk)
     template_name        = 'member/crud.html'
     MemberFormset        = inlineformset_factory(Team, Member, fields=('officialSurname','officialName','stageName','age',), can_delete=True, extra=1, max_num=obj.contest.membersPerTeam)
     
@@ -205,7 +220,15 @@ def member_list_view(request, slug, pk):
     return render(request, template_name, context)
 
 
-# # Extra =================================================================================================
+
+# Round =================================================================================================
+
+@login_required(login_url='admin/login/?next=/')
+def round_list_view(request, slug):
+    qs = Round.objects.filter(contest__slug=slug)
+    template_name    = 'round/list.html'
+    context         = {'object_list': qs}
+    return render(request, template_name, context)
 
 # @login_required(login_url='admin/login/?next=/')
 # def magic_button(request, slug):
