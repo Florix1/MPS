@@ -1,14 +1,14 @@
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
-from django.forms import inlineformset_factory
+from django.forms import modelformset_factory, inlineformset_factory
 from .forms import ContestPostModelForm
 
 from contestapp.models import (
         Contest,
         Team,
         Category,
-        # Grade,
+        Grade,
         Member,
         Round,
     )
@@ -66,15 +66,16 @@ def contest_post_delete_view(request, slug):
     return render(request, template_name, context)
 
 @login_required(login_url='admin/login/?next=/')
-def start_contest_view(request, slug):
+def contest_start_view(request, slug):
     obj = get_object_or_404(Contest, slug=slug)
     obj.isStarted    = True
     obj.canVote        = True
     for i in range(obj.numberOfRounds):
         rnd         = Round()
-        rnd.number                =    i + 1
-        rnd.contest             =   obj
+        rnd.number  = i + 1
+        rnd.contest = obj
         rnd.save()
+    addGradeNextRound(slug)
     template_name   = 'contest/start.html'
     context         = {'object': obj}
     return render(request, template_name, context)
@@ -129,7 +130,7 @@ def team_list_post_view(request, slug):
 def team_crud_post_view(request, slug):
     obj                 = get_object_or_404(Contest, slug=slug)
     template_name        = 'team/crud.html'
-    TeamFormset            = inlineformset_factory(Contest, Team, fields=('teamName', 'numberOnBack'), can_delete=True, extra=1, max_num=obj.membersPerTeam)
+    TeamFormset            = inlineformset_factory(Contest, Team, fields=('teamName', 'numberOnBack', 'isDisqualified', 'isStillCompeting'), can_delete=True, extra=1, max_num=obj.teamCount)
     
     if request.method == 'POST':
         formset = TeamFormset(request.POST, instance=obj)
@@ -159,19 +160,25 @@ def team_post_delete_view(request, slug, pk):
         return redirect("/")
     return render(request, template_name, context)
 
-# # Grade =====================================================================
+# Grade =====================================================================
 
-
-# @login_required(login_url='admin/login/?next=/')
-# def grade_create_view(request):
-#     form = ContestPostModelForm(request.POST or None)
-#     if form.is_valid():
-#         form.save()
-#         form = ContestPostModelForm()
-#     template_name    = 'contest/form.html'
-#     context         = {'form': form}
-#     return render(request, template_name, context)
-
+@login_required(login_url='admin/login/?next=/')
+def grade_crud_view(request, slug, pk):
+    obj                 = get_object_or_404(Team, pk=pk)
+    template_name       = 'grade/crud.html'
+    GradeFormset        = modelformset_factory(Grade, fields=('grade','comment','bonus'), can_delete=False, extra=0)
+    
+    if request.method == 'POST':
+        formset = GradeFormset(request.POST, instance=obj)
+        if formset.is_valid():
+            instances = formset.save(commit=False)
+            for instance in instances:
+                instance.postedBy = request.user
+                instance.save()
+            return redirect(grade_crud_view, slug=slug, pk=pk)
+    formset         = GradeFormset(instance=obj)
+    context         = {'formset': formset}
+    return render(request, template_name, context)
 
 # @login_required(login_url='admin/login/?next=/')
 # def grade_crud_view(request, slug, pk, c_pk):
@@ -251,3 +258,19 @@ def round_list_view(request, slug):
 #     template_name   = 'rezultat.html'
 #     context         = {'object': answer, 'winners': winners, 'score' : maxim}
 #     return render(request, template_name, context)
+
+
+# Extra =================================================================================================
+
+def addGradeNextRound(slug):
+    contest     = get_object_or_404(Contest, slug=slug)
+    team_qs     = contest.teams.filter(isDisqualified=False, isStillCompeting=True)
+    category_qs = contest.categories.all()
+    roundNr     = contest.currentRound
+    for team in team_qs:
+        for categ in category_qs:
+            grade               = Grade()
+            grade.roundNumber   = roundNr
+            grade.teamName      = team
+            grade.categoryName  = categ
+            grade.save()

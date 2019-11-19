@@ -96,15 +96,15 @@ class Category(models.Model):
 # ==============================================================================================================================
 
 
-# class Grade(models.Model):
-# 	grade				=	models.PositiveIntegerField(default=0)
-# 	postedBy			=	models.ForeignKey(User, on_delete=models.CASCADE)
-# 	roundNumber			=	models.PositiveIntegerField(default=1)
-# 	bonus				=	models.PositiveIntegerField(default=0)
-# 	comment				=	models.CharField(max_length=80, default='')
-# 	# ========================= Hidden ==========================================
-# 	teamName 			=   models.ForeignKey('Team', related_name='teams', on_delete=models.CASCADE)
-# 	categoryName 		=	models.ForeignKey('Category', related_name='grades', on_delete=models.CASCADE)
+class Grade(models.Model):
+	grade				=	models.PositiveIntegerField(default=0)
+	postedBy			=	models.ForeignKey(User, on_delete=models.CASCADE, default=None, blank=True, null=True)
+	roundNumber			=	models.PositiveIntegerField(default=1)
+	bonus				=	models.PositiveIntegerField(default=0)
+	comment				=	models.CharField(max_length=30, default='')
+	# ========================= Hidden ==========================================
+	teamName 			=   models.ForeignKey('Team', related_name='teams', on_delete=models.CASCADE)
+	categoryName 		=	models.ForeignKey('Category', related_name='grades', on_delete=models.CASCADE)
 
 
 # ==============================================================================================================================
@@ -120,4 +120,3 @@ class Member(models.Model):
 
 
 # ==============================================================================================================================
-
