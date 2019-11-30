@@ -163,19 +163,23 @@ def team_post_delete_view(request, slug, pk):
 # Grade =====================================================================
 
 @login_required(login_url='admin/login/?next=/')
-def grade_crud_view(request, slug, pk):
+def grade_crud_view(request, slug, no, pk):
     obj                 = get_object_or_404(Team, pk=pk)
     template_name       = 'grade/crud.html'
-    GradeFormset        = modelformset_factory(Grade, fields=('grade','comment','bonus'), can_delete=False, extra=0)
+    GradeFormset        = inlineformset_factory(Team, Grade, fields=('categoryName', 'grade', 'bonus'), can_delete=False, extra=0)
     
     if request.method == 'POST':
         formset = GradeFormset(request.POST, instance=obj)
+        print("1")
         if formset.is_valid():
+            print("2")
             instances = formset.save(commit=False)
             for instance in instances:
                 instance.postedBy = request.user
                 instance.save()
-            return redirect(grade_crud_view, slug=slug, pk=pk)
+            print("3")
+            return redirect(grade_crud_view, slug=slug, no=no, pk=pk)
+    print("4")
     formset         = GradeFormset(instance=obj)
     context         = {'formset': formset}
     return render(request, template_name, context)
@@ -231,12 +235,14 @@ def member_list_view(request, slug, pk):
 
 # Round =================================================================================================
 
+
 @login_required(login_url='admin/login/?next=/')
 def round_list_view(request, slug):
     qs = Round.objects.filter(contest__slug=slug)
     template_name    = 'round/list.html'
     context         = {'object_list': qs}
     return render(request, template_name, context)
+
 
 @login_required(login_url='admin/login/?next=/')
 def round_detail_view(request, slug, no):

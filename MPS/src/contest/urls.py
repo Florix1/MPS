@@ -35,7 +35,7 @@ from .views import (
     contest_start_view,
     round_list_view,
     round_detail_view,
-    # grade_crud_view,
+    grade_crud_view,
     # magic_button,
     # category_post_list_view1,
 )
@@ -82,7 +82,7 @@ urlpatterns = [
 
 # # ==============================================  ?? ===================================================
 
-#     path('contest/<str:slug>/team/<int:pk>/categ/<int:c_pk>/', grade_crud_view),
+    path('contest/<str:slug>/round/<int:no>/team/<int:pk>/', grade_crud_view),
 
 #     path('contest/<str:slug>/team/<int:pk>/category-list/', category_post_list_view1),
 #     path('contest/<str:slug>/rezultat',magic_button),
