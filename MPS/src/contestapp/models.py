@@ -69,6 +69,8 @@ class Round(models.Model):
 	isStarted			=	models.BooleanField(default=False)
 	hasEnded			=	models.BooleanField(default=False)
 
+	def get_absolute_url(self):
+		return f"/contest/{self.contest.slug}/round/{self.number}/"
 
 # ==============================================================================================================================
 

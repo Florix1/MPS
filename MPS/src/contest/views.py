@@ -58,8 +58,8 @@ def contest_post_update_view(request, slug):
 @login_required(login_url='admin/login/?next=/')
 def contest_post_delete_view(request, slug):
     obj = get_object_or_404(Contest, slug=slug)
-    template_name    = 'contest/delete.html'
-    context         = {'object': obj}
+    template_name       = 'contest/delete.html'
+    context             = {'object': obj}
     if request.method == "POST":
         obj.delete()
         return redirect("/")
@@ -68,8 +68,8 @@ def contest_post_delete_view(request, slug):
 @login_required(login_url='admin/login/?next=/')
 def contest_start_view(request, slug):
     obj = get_object_or_404(Contest, slug=slug)
-    obj.isStarted    = True
-    obj.canVote        = True
+    obj.isStarted   = True
+    obj.canVote     = True
     for i in range(obj.numberOfRounds):
         rnd         = Round()
         rnd.number  = i + 1
@@ -228,6 +228,7 @@ def member_list_view(request, slug, pk):
 
 
 
+
 # Round =================================================================================================
 
 @login_required(login_url='admin/login/?next=/')
@@ -235,6 +236,13 @@ def round_list_view(request, slug):
     qs = Round.objects.filter(contest__slug=slug)
     template_name    = 'round/list.html'
     context         = {'object_list': qs}
+    return render(request, template_name, context)
+
+@login_required(login_url='admin/login/?next=/')
+def round_detail_view(request, slug, no):
+    qs = Team.objects.filter(contest__slug=slug)
+    template_name    = 'round/team_list.html'
+    context         = {'object_list': qs, 'round': no}
     return render(request, template_name, context)
 
 # @login_required(login_url='admin/login/?next=/')

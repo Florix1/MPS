@@ -34,6 +34,7 @@ from .views import (
     member_crud_view,
     contest_start_view,
     round_list_view,
+    round_detail_view,
     # grade_crud_view,
     # magic_button,
     # category_post_list_view1,
@@ -75,7 +76,8 @@ urlpatterns = [
 # ==============================================  ?? ===================================================
 
     path('contest/<str:slug>/round-list/', round_list_view),
-    # TODO integrate rounds if needed then check the grading view
+    path('contest/<str:slug>/round/<int:no>/', round_detail_view),
+    # TODO integrate series if needed then check the grading view
     # path('contest/<str:slug>/round-list/', round_list_view),
 
 # # ==============================================  ?? ===================================================
