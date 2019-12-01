@@ -86,7 +86,7 @@ class Round(models.Model):
 
 class Category(models.Model):
 	name 				=	models.CharField(max_length=30)
-	percent				=	models.PositiveIntegerField(default=100)
+	percent				=	models.PositiveIntegerField()
 	# ========================= Hidden ==========================================
 	contest             =	models.ForeignKey('Contest', related_name='categories', on_delete=models.CASCADE)
 
