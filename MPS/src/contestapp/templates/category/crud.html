@@ -11,6 +11,9 @@
 <form method='POST' action=''> {% csrf_token %}
 
 	<div class="fieldWrapper" style="color: white;">
+	{% for error in validation_error %}
+		<p> {{ error }} </p>
+	{% endfor %}
 		{{ formset.as_p }}
 	</div>
 	<br><button type='submit' class="btn btn2 btn-lg">Update</button>

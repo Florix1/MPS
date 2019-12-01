@@ -1,15 +1,18 @@
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
-from django.forms import inlineformset_factory
+from django.forms import inlineformset_factory, BaseInlineFormSet
 from .forms import ContestPostModelForm
+from django import forms
+from django.core.exceptions import ValidationError
 
 from contestapp.models import (
         Contest,
         Team,
         Category,
-        # Grade,
+        Grade,
         Member,
+        Round,
     )
 
 
@@ -57,12 +60,28 @@ def contest_post_update_view(request, slug):
 @login_required(login_url='admin/login/?next=/')
 def contest_post_delete_view(request, slug):
     obj = get_object_or_404(Contest, slug=slug)
-    template_name    = 'contest/delete.html'
-    context         = {'object': obj}
+    template_name       = 'contest/delete.html'
+    context             = {'object': obj}
     if request.method == "POST":
         obj.delete()
         return redirect("/")
     return render(request, template_name, context)
+
+@login_required(login_url='admin/login/?next=/')
+def contest_start_view(request, slug):
+    obj = get_object_or_404(Contest, slug=slug)
+    obj.isStarted   = True
+    obj.canVote     = True
+    for i in range(obj.numberOfRounds):
+        rnd         = Round()
+        rnd.number  = i + 1
+        rnd.contest = obj
+        rnd.save()
+    addGradeNextRound(slug)
+    template_name   = 'contest/start.html'
+    context         = {'object': obj}
+    return render(request, template_name, context)
+
 
 
 # Category  =================================================================
@@ -71,16 +90,27 @@ def contest_post_delete_view(request, slug):
 def category_crud_post_view(request, slug):
     obj                 = get_object_or_404(Contest, slug=slug)
     template_name        = 'category/crud.html'
-    CategoryFormset        = inlineformset_factory(Contest, Category, fields=('name',), can_delete=True, extra=1, max_num=15)
+    CategoryFormset        = inlineformset_factory(Contest, Category, 
+                                                    fields=('name', 'percent'), 
+                                                    formset=CategoryInlineFormSet, 
+                                                    can_delete=True, extra=3, max_num=15,
+                                                    # //TODO widget,labels
+                                                    widgets={'categoryName': forms.Select(attrs={'disabled':'true'})}
+                                                    )
     
+    validation_error = []
     if request.method == 'POST':
         formset = CategoryFormset(request.POST, instance=obj)
         if formset.is_valid():
             formset.save()
             return redirect(category_crud_post_view, slug=slug)
+        else:
+            validation_error = formset._non_form_errors.as_data()
 
+    
     formset             = CategoryFormset(instance=obj)
-    context             = {'formset': formset}
+    context             = {'formset': formset, 'validation_error': validation_error}
+
     return render(request, template_name, context)
 
 
@@ -91,12 +121,29 @@ def category_post_list_view(request, slug):
     context         = {'object_list': qs}
     return render(request, template_name, context)
 
-# @login_required(login_url='admin/login/?next=/')
-# def category_post_list_view1(request, slug, pk):
-#     qs = Category.objects.filter(contest__slug=slug)
-#     template_name    = 'category/list1.html'
-#     context         = {'object_list': qs, 'slug':slug , 'pk': pk}
-#     return render(request, template_name, context)
+class CategoryInlineFormSet(BaseInlineFormSet):
+    def clean(self, *args, **kwargs):
+        super(CategoryInlineFormSet, self).clean()
+        total = 0
+        i = 0
+        for form in self.forms:
+            if not form.is_valid():
+                continue
+            if form.cleaned_data and not form.cleaned_data.get('DELETE'):
+                # print("=============================" + str(i))
+                print(form.cleaned_data)
+                if form.cleaned_data.get('percent') > 100:
+                    raise forms.ValidationError("Error overflow")
+                else:
+                    # form.instance.is_correct = True
+                    total += form.cleaned_data['percent']
+            # print("=============================" + str(i))
+            i += 1
+        if total != 100:
+            raise forms.ValidationError("Ai luat meditaii de la Viorica?!?!")
+        # return self.cleaned_data
+
+
 
 # Team ======================================================================
 
@@ -113,7 +160,11 @@ def team_list_post_view(request, slug):
 def team_crud_post_view(request, slug):
     obj                 = get_object_or_404(Contest, slug=slug)
     template_name        = 'team/crud.html'
-    TeamFormset            = inlineformset_factory(Contest, Team, fields=('teamName', 'numberOnBack'), can_delete=True, extra=1, max_num=obj.membersPerTeam)
+    TeamFormset            = inlineformset_factory(Contest, Team, 
+                                                    fields=('teamName', 'numberOnBack', 'isDisqualified', 'isStillCompeting'), 
+                                                    can_delete=True, extra=1, max_num=obj.teamCount, 
+                                                    # //TODO widget,labels
+                                                    )
     
     if request.method == 'POST':
         formset = TeamFormset(request.POST, instance=obj)
@@ -143,20 +194,39 @@ def team_post_delete_view(request, slug, pk):
         return redirect("/")
     return render(request, template_name, context)
 
+# Grade =====================================================================
 
-# # Grade =====================================================================
-
-
-# @login_required(login_url='admin/login/?next=/')
-# def grade_create_view(request):
-#     form = ContestPostModelForm(request.POST or None)
-#     if form.is_valid():
-#         form.save()
-#         form = ContestPostModelForm()
-#     template_name    = 'contest/form.html'
-#     context         = {'form': form}
-#     return render(request, template_name, context)
-
+@login_required(login_url='admin/login/?next=/')
+def grade_crud_view(request, slug, no, pk):
+    obj                 = get_object_or_404(Team, pk=pk)
+    template_name       = 'grade/crud.html'
+    GradeFormset        = inlineformset_factory(Team, Grade, 
+                                                fields=('categoryName', 'grade', 'bonus'), 
+                                                can_delete=False, extra=0,
+                                                labels={
+                                                        'categoryName': 'Category',
+                                                        'grade': 'Grade',
+                                                        'bonus': 'Bonus',
+                                                  },
+                                                # help_texts={
+                                                #         'categoryName': None,
+                                                #         'grade': 'Rate it',
+                                                #         'bonus': 'Add it',
+                                                # },
+                                                widgets={'categoryName': forms.Select(attrs={'disabled':'true'})}
+                                                )
+    
+    if request.method == 'POST':
+        formset = GradeFormset(request.POST, instance=obj)
+        if formset.is_valid():
+            instances = formset.save(commit=False)
+            for instance in instances:
+                instance.postedBy = request.user
+                instance.save()
+            return redirect(grade_crud_view, slug=slug, no=no, pk=pk)
+    formset         = GradeFormset(instance=obj)
+    context         = {'formset': formset}
+    return render(request, template_name, context)
 
 # @login_required(login_url='admin/login/?next=/')
 # def grade_crud_view(request, slug, pk, c_pk):
@@ -182,9 +252,13 @@ def team_post_delete_view(request, slug, pk):
 
 @login_required(login_url='admin/login/?next=/')
 def member_crud_view(request, slug, pk):
-    obj 				 = get_object_or_404(Team, pk=pk)
+    obj                  = get_object_or_404(Team, pk=pk)
     template_name        = 'member/crud.html'
-    MemberFormset        = inlineformset_factory(Team, Member, fields=('officialSurname','officialName','stageName','age',), can_delete=True, extra=1, max_num=obj.contest.membersPerTeam)
+    MemberFormset        = inlineformset_factory(Team, Member, 
+                                                fields=('officialSurname','officialName','stageName','age',), 
+                                                can_delete=True, extra=1, max_num=obj.contest.membersPerTeam
+                                                # //TODO widget,labels
+                                                )
     
     if request.method == 'POST':
         formset = MemberFormset(request.POST, instance=obj)
@@ -205,7 +279,25 @@ def member_list_view(request, slug, pk):
     return render(request, template_name, context)
 
 
-# # Extra =================================================================================================
+
+
+# Round =================================================================================================
+
+
+@login_required(login_url='admin/login/?next=/')
+def round_list_view(request, slug):
+    qs = Round.objects.filter(contest__slug=slug)
+    template_name    = 'round/list.html'
+    context         = {'object_list': qs}
+    return render(request, template_name, context)
+
+
+@login_required(login_url='admin/login/?next=/')
+def round_detail_view(request, slug, no):
+    qs = Team.objects.filter(contest__slug=slug)
+    template_name    = 'round/team_list.html'
+    context         = {'object_list': qs, 'round': no}
+    return render(request, template_name, context)
 
 # @login_required(login_url='admin/login/?next=/')
 # def magic_button(request, slug):
@@ -228,3 +320,21 @@ def member_list_view(request, slug, pk):
 #     template_name   = 'rezultat.html'
 #     context         = {'object': answer, 'winners': winners, 'score' : maxim}
 #     return render(request, template_name, context)
+
+
+# Extra =================================================================================================
+
+def addGradeNextRound(slug):
+    contest     = get_object_or_404(Contest, slug=slug)
+    team_qs     = contest.teams.filter(isDisqualified=False, isStillCompeting=True)
+    category_qs = contest.categories.all()
+    roundNr     = contest.currentRound
+    for team in team_qs:
+        for categ in category_qs:
+            grade               = Grade()
+            grade.roundNumber   = roundNr
+            grade.teamName      = team
+            grade.categoryName  = categ
+            grade.save()
+
+

@@ -11,13 +11,14 @@ class Contest(models.Model):
 	teamCount				=	models.PositiveIntegerField()
 	membersPerTeam			=	models.PositiveIntegerField()
 	typeOfContest			=	models.PositiveIntegerField(default=0)
-	numberOfRounds			=	models.PositiveIntegerField()
+	numberOfRounds			=	models.PositiveIntegerField(default=1)
+	# TODO	numberOfSeries			=	models.PositiveIntegerField()
 	# ========================= Hidden ==========================================
 	slug 					=	models.SlugField(unique=True)
 	canVote					=	models.BooleanField(default=False)
 	isStarted				=	models.BooleanField(default=False)
-	currentRound			=	models.PositiveIntegerField(default=0)
-	currentSeries			=	models.PositiveIntegerField(default=0)
+	currentRound			=	models.PositiveIntegerField(default=1)
+	currentSeries			=	models.PositiveIntegerField(default=1)
 
 
 	def __str__(self):
@@ -40,9 +41,11 @@ class Contest(models.Model):
 
 # ==============================================================================================================================
 
+
 class Team(models.Model):
 	teamName			=	models.CharField(max_length=40)
 	numberOnBack		=	models.PositiveIntegerField()
+	# TODO numberOfSeries		=	models.PositiveIntegerField()
 	# ========================= Hidden ==========================================
 	isDisqualified		=	models.BooleanField(default=False)
 	isStillCompeting	=	models.BooleanField(default=True)
@@ -59,16 +62,17 @@ class Team(models.Model):
 # ==============================================================================================================================
 
 
+class Round(models.Model):
+	number				=	models.PositiveIntegerField(default=1)
+	seriesNumber		= 	models.PositiveIntegerField(default=1)
+	contest             =   models.ForeignKey('Contest', related_name='rounds', on_delete=models.CASCADE)
+	isStarted			=	models.BooleanField(default=False)
+	hasEnded			=	models.BooleanField(default=False)
 
-# class Round(models.Model):
-# 	number				=	models.PositiveIntegerField()
-# 	seriesNumber		= 	models.PositiveIntegerField()
-# 	contest             =   models.ForeignKey('Contest', related_name='categories', on_delete=models.CASCADE)
-# 	startRound			=
-# 	endRound			=
+	def get_absolute_url(self):
+		return f"/contest/{self.contest.slug}/round/{self.number}/"
 
-
-# # ==============================================================================================================================
+# ==============================================================================================================================
 
 
 # # class Series(models.Model):
@@ -82,9 +86,10 @@ class Team(models.Model):
 
 class Category(models.Model):
 	name 				=	models.CharField(max_length=30)
-	percent				=	models.PositiveIntegerField(default=100)
+	percent				=	models.PositiveIntegerField()
 	# ========================= Hidden ==========================================
 	contest             =	models.ForeignKey('Contest', related_name='categories', on_delete=models.CASCADE)
+
 
 	def __str__(self):
 		return self.name
@@ -93,15 +98,15 @@ class Category(models.Model):
 # ==============================================================================================================================
 
 
-# class Grade(models.Model):
-# 	grade				=	models.PositiveIntegerField(default=0)
-# 	postedBy			=	models.ForeignKey(User, on_delete=models.CASCADE)
-# 	roundNumber			=	models.PositiveIntegerField(default=1)
-# 	bonus				=	models.PositiveIntegerField(default=0)
-# 	comment				=	models.CharField(max_length=80, default='')
-# 	# ========================= Hidden ==========================================
-# 	teamName 			=   models.ForeignKey('Team', related_name='teams', on_delete=models.CASCADE)
-# 	categoryName 		=	models.ForeignKey('Category', related_name='grades', on_delete=models.CASCADE)
+class Grade(models.Model):
+	grade				=	models.PositiveIntegerField(default=0)
+	postedBy			=	models.ForeignKey(User, on_delete=models.CASCADE, default=None, blank=True, null=True)
+	roundNumber			=	models.PositiveIntegerField(default=1)
+	bonus				=	models.PositiveIntegerField(default=0)
+	comment				=	models.CharField(max_length=30, default='')
+	# ========================= Hidden ==========================================
+	teamName 			=   models.ForeignKey('Team', related_name='teams', on_delete=models.CASCADE)
+	categoryName 		=	models.ForeignKey('Category', related_name='grades', on_delete=models.CASCADE)
 
 
 # ==============================================================================================================================
@@ -115,9 +120,5 @@ class Member(models.Model):
 	# ========================= Hidden ==========================================
 	team 				=	models.ForeignKey('Team', related_name='people', on_delete=models.CASCADE)
 
-	def __str__(self):
-		return self.name
-
 
 # ==============================================================================================================================
-
