@@ -239,6 +239,18 @@ def grade_crud_view(request, slug, no, pk):
     context         = {'formset': formset}
     return render(request, template_name, context)
 
+
+@login_required(login_url='admin/login/?next=/')
+def grade_round_list_view(request, slug, no):
+    qs = Grade.objects.filter(teamName__contest__slug=slug).filter(roundNumber=no)
+    team_qs = Team.objects.filter(contest__slug=slug)
+    grades = []
+    for team in team_qs:
+        grades.append(qs.filter(teamName__pk=team.pk))
+    template_name    = 'grade/round_list.html'
+    context         = {'object_list': grades, 'round': no}
+    return render(request, template_name, context)
+
 # @login_required(login_url='admin/login/?next=/')
 # def grade_crud_view(request, slug, pk, c_pk):
 #     obj                 = get_object_or_404(Category, pk=c_pk)
@@ -290,8 +302,6 @@ def member_list_view(request, slug, pk):
     return render(request, template_name, context)
 
 
-
-
 # Round =================================================================================================
 
 
@@ -313,6 +323,7 @@ def round_detail_view(request, slug, no):
 
 # Extra =================================================================================================
 
+
 def addGradeNextRound(slug):
     contest     = get_object_or_404(Contest, slug=slug)
     team_qs     = contest.teams.filter(isDisqualified=False, isStillCompeting=True)
@@ -326,8 +337,9 @@ def addGradeNextRound(slug):
             grade.categoryName  = categ
             grade.save()
 
+
 @login_required(login_url='admin/login/?next=/')
-def magic_button(request, slug):
+def elimination_button(request, slug):
     contest     = get_object_or_404(Contest, slug=slug)
     team_qs     = Team.objects.filter(contest__slug=slug).filter(isStillCompeting=True).filter(isDisqualified=False)
     print(team_qs)
@@ -336,11 +348,70 @@ def magic_button(request, slug):
         v[team.pk] = 0
         grade_qs = Grade.objects.filter(teamName__pk=team.pk).filter(teamName__contest__slug=slug).filter(roundNumber=contest.currentRound)
         for grade in grade_qs:
-            print(grade.grade)
-            v[team.pk] += grade.grade
+            print(team.teamName + ' ' +  str(grade.grade) + ' ' + grade.categoryName.name + ' %' + str(grade.categoryName.percent))
+            v[team.pk] += grade.grade * grade.categoryName.percent
             v[team.pk] += grade.bonus
+    
+    answer =  []
+    answer.append(team_qs.first())
+    minim  = v[answer[0].pk]
+    print(minim)
+    for team in team_qs:
+        print(team.teamName + ' ' + str(v[team.pk]))
+        if v[team.pk] < minim:
+            answer.clear()
+            answer.append(team)
+            minim = v[team.pk]
+        elif v[team.pk] == minim:
+            answer.append(team)
+
+    answer = list(set(answer))
+    if (len(answer) == 1):
+        answer[0].isStillCompeting = False
+        answer[0].save()
+        print('Elimin pe cineva!!!!!')
+    print('Loser' + str(answer))
+
     template_name    = 'contest/details.html'
-    context          = {'object': contest}
+    context          = {'object': contest, 'answer': answer}
+    return render(request, template_name, context)
+
+
+@login_required(login_url='admin/login/?next=/')
+def winner_button(request, slug):
+    contest     = get_object_or_404(Contest, slug=slug)
+    team_qs     = Team.objects.filter(contest__slug=slug).filter(isStillCompeting=True).filter(isDisqualified=False)
+    print(team_qs)
+    v = {}
+    for team in team_qs:
+        v[team.pk] = 0
+        grade_qs = Grade.objects.filter(teamName__pk=team.pk).filter(teamName__contest__slug=slug).filter(roundNumber=contest.currentRound)
+        for grade in grade_qs:
+            print(team.teamName + ' ' +  str(grade.grade) + ' ' + grade.categoryName.name + ' %' + str(grade.categoryName.percent))
+            v[team.pk] += grade.grade * grade.categoryName.percent
+            v[team.pk] += grade.bonus
+    
+    answer =  []
+    answer.append(team_qs.first())
+    maxim  = v[answer[0].pk]
+    print(maxim)
+    for team in team_qs:
+        if v[team.pk] > maxim:
+            answer.clear()
+            answer.append(team)
+            maxim = v[team.pk]
+        elif v[team.pk] == maxim:
+            answer.append(team)
+
+    answer = list(set(answer))
+    if (len(answer) == 1):
+        winner = answer[0]
+    else:
+        winner = answer
+
+    print('Winner' + str(answer))
+    template_name    = 'contest/details.html'
+    context          = {'object': contest, 'winner': winner}
     return render(request, template_name, context)
 
 # @login_required(login_url='admin/login/?next=/')

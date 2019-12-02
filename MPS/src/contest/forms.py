@@ -12,7 +12,7 @@ class ContestPostModelForm(forms.ModelForm):
         'teamCount',
         'membersPerTeam',
         'typeOfContest',
-        'numberOfRounds'
+        'numberOfRounds',
         ]
 
     def clean_title(self, *args, **kwargs):
