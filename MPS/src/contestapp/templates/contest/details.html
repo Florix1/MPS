@@ -3,36 +3,51 @@
 
 
 {% block content %}
-    <h1 style="font-family: Bauhaus; color: white; opacity:85%; font-size:45px;">ABOUT</h1> <br>
-<p style="font-family: Bauhaus; color: white; font-size:25px; opacity:85%;"><b>Title: </b>
-	<i style="color: #f9917a; opacity:50% !important;">{{ object.title }}</i></p>
-<p style="font-family: Bauhaus; color: white; font-size:25px; opacity:85%;"><b>Number of Teams: </b>
-	<i style="color: #f9917a;; opacity:50% !important;">{{ object.teamCount }}</i></p>
-<p style="font-family: Bauhaus; color: white; font-size:25px; opacity:85%;"><b>Members per Team: </b>
-	<i style="color: #f9917a;; opacity:50% !important;">{{ object.membersPerTeam }}</i></p>
-<p style="font-family: Bauhaus; color: white; font-size:25px; opacity:85%;"><b>Type of Contest: </b>
-	<i style="color: #f9917a;; opacity:50% !important;">{{ object.typeOfContest }}</i></p>
-<p style="font-family: Bauhaus; color: white; font-size:25px; opacity:85%;"><b>Number of Rounds: </b>
-	<i style="color: #f9917a;; opacity:50% !important;">{{ object.numberOfRounds }}</i></p>
+    <h1 style="padding-top: 3%; padding-left: 3%; font-family: TeX Gyre Adventor; color: white; opacity:85%; font-size:45px;">About</h1> <br>
+<p style="padding-left: 3%; font-family: Bauhaus; color: white; font-size:25px; opacity:85%;"><b>Title: </b>
+	<i style="color: #fbb39c; opacity:50% !important;">{{ object.title }}</i></p>
+<p style="padding-left: 3%; font-family: Bauhaus; color: white; font-size:25px; opacity:85%;"><b>Number of Teams: </b>
+	<i style="color: #fbb39c; opacity:50% !important;">{{ object.teamCount }}</i></p>
+<p style="padding-left: 3%; font-family: Bauhaus; color: white; font-size:25px; opacity:85%;"><b>Members per Team: </b>
+	<i style="color: #fbb39c; opacity:50% !important;">{{ object.membersPerTeam }}</i></p>
+<p style="padding-left: 3%; font-family: Bauhaus; color: white; font-size:25px; opacity:85%;"><b>Type of Contest: </b>
+	<i style="color: #fbb39c; opacity:50% !important;">{{ object.typeOfContest }}</i></p>
+<p style="padding-left: 3%; font-family: Bauhaus; color: white; font-size:25px; opacity:85%;"><b>Number of Rounds: </b>
+	<i style="color: #fbb39c; opacity:50% !important;">{{ object.numberOfRounds }}</i></p>
 
+<div style="padding-left: 1%">
 {% if request.user.is_superuser %}
-	<a type="button" class="btn btn3 btn-lg" style="color: black; width:200px;" href='{{ object.get_edit_url }}'>Edit</a></button>
-	<a type="button" class="btn btn4 btn-lg" style="color: black; width:200px;" href='{{ object.get_delete_url }}'>Delete</a></button>
-<br><br>
-	<a type="button" class="btn btn5 btn-lg" style="color: black; width:200px;" href='{{ object.get_absolute_url }}/category-new'>Create Category</a></button>
-	<a type="button" class="btn btn6 btn-lg" style="color: black; width:200px;" href='{{ object.get_absolute_url }}/category-list'>Show Categories</a></button>
-<br><br>
-	<a type="button" class="btn btn5 btn-lg" style="color: black; width:200px;" href='{{ object.get_absolute_url }}/team-new'>Create Team</a></button>
-	<a type="button" class="btn btn6 btn-lg" style="color: black; width:200px;" href='{{ object.get_absolute_url }}/team-list'>Show Teams</a></button>
-<br><br>
-	<a type="button" class="btn btn6 btn-lg" style="color: black; width:200px;" href='{{ object.get_absolute_url }}/start'>Start Contest</a></button>
-	<a type="button" class="btn btn6 btn-lg" style="color: black; width:200px;" href='{{ object.get_absolute_url }}/round-list'>Show Rounds</a></button>
-<br><br>
-	<a type="button" class="btn btn6 btn-lg" style="color: black; width:200px;" href='{{ object.get_absolute_url }}/magic'>Elimination</a></button>
-	<a type="button" class="btn btn6 btn-lg" style="color: black; width:200px;" href='{{ object.get_absolute_url }}/winner'>Show Winner</a></button>
-{% else %}
-	<a type="button" class="btn btn6 btn-lg" style="color: black;" href='{{ object.get_absolute_url }}/category-list'>Category List</a></button>
-	<a type="button" class="btn btn6 btn-lg" style="color: black;" href='{{ object.get_absolute_url }}/team-list'>Team List</a></button>
-{% endif %}
 
+	<a type="button" class="btn btn3 btn-lg" style="font-family: TeX Gyre Adventor; color: black; width:220px;"
+	   href='{{ object.get_edit_url }}'>Edit</a></button>
+	<a type="button" class="btn btn4 btn-lg" style="font-family: TeX Gyre Adventor; color: black; width:220px;"
+	   href='{{ object.get_delete_url }}'>Delete</a></button>
+<br><br>
+	<a type="button" class="btn btn5 btn-lg" style="font-family: TeX Gyre Adventor; color: black; width:220px;"
+	   href='{{ object.get_absolute_url }}/category-new'>Create Category</a></button>
+	<a type="button" class="btn btn6 btn-lg" style="font-family: TeX Gyre Adventor; color: black; width:220px;"
+	   href='{{ object.get_absolute_url }}/category-list'>Show Categories</a></button>
+<br><br>
+	<a type="button" class="btn btn5 btn-lg" style="font-family: TeX Gyre Adventor; color: black; width:220px;"
+	   href='{{ object.get_absolute_url }}/team-new'>Create Team</a></button>
+	<a type="button" class="btn btn6 btn-lg" style="font-family: TeX Gyre Adventor; color: black; width:220px;"
+	   href='{{ object.get_absolute_url }}/team-list'>Show Teams</a></button>
+<br><br>
+	<a type="button" class="btn btn11 btn-lg" style="font-family: TeX Gyre Adventor; color: black; width:444px;"
+	   href='{{ object.get_absolute_url }}/start'>Start Contest</a></button>
+<br><br>
+	<a type="button" class="btn btn6 btn-lg" style="font-family: TeX Gyre Adventor; color: black; width:220px;"
+	   href='{{ object.get_absolute_url }}/round-list'>Show Rounds</a></button>
+	<a type="button" class="btn btn4 btn-lg" style="font-family: TeX Gyre Adventor; color: black; width:220px;"
+	   href='{{ object.get_absolute_url }}/magic'>Elimination</a></button>
+<br><br>
+	<a type="button" class="btn btn12 btn-lg" style="font-family: TeX Gyre Adventor; color: black; width:444px;"
+	   href='{{ object.get_absolute_url }}/winner'>Show Winner</a></button>
+{% else %}
+	<a type="button" class="btn btn6 btn-lg" style="font-family: TeX Gyre Adventor; color: black; width:220px;"
+	   href='{{ object.get_absolute_url }}/category-list'>Category List</a></button>
+	<a type="button" class="btn btn6 btn-lg" style="font-family: TeX Gyre Adventor; color: black; width:220px;"
+	   href='{{ object.get_absolute_url }}/team-list'>Team List</a></button>
+{% endif %}
+</div>
 {% endblock %}
