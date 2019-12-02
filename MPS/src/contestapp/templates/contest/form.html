@@ -3,17 +3,19 @@
 
 
 {% block content %}
-    <h1 style="font-family: Candara; color: white">Create new Contest</h1>
+    <h1 style="font-family: Bauhaus; color: white; opacity: 85%">Create new Contest</h1>
+<br>
 
 
 <form method='POST' action=''> {% csrf_token %}
 	{% for field in form %}
-	<div class="fieldWrapper" style="color: white;">
+	<div class="fieldWrapper" style="font-family: Bauhaus; color: white; font-size:20px;">
 		{{ field.errors }}
-		{{ field.label_tag }} <br/>
+		{{ field.label_tag }} <br>
 		{{ field }}
 	</div>
+	<br>
 	{% endfor %}
-	<br><button type='submit' class="btn btn2 btn-lg">Let's get started</button>
+	<br><button type='submit' class="btn btn2 btn-lg" style="font-family: Bauhaus">Let's get started</button>
 </form>
 {% endblock %}
