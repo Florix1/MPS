@@ -93,7 +93,9 @@ def category_crud_post_view(request, slug):
     CategoryFormset        = inlineformset_factory(Contest, Category, 
                                                     fields=('name', 'percent'), 
                                                     formset=CategoryInlineFormSet, 
-                                                    can_delete=True, extra=3, max_num=15,
+                                                    can_delete=True, 
+                                                    extra=3, 
+                                                    max_num=15,
                                                     # //TODO widget,labels
                                                     widgets={'categoryName': forms.Select(attrs={'disabled':'true'})}
                                                     )
@@ -106,7 +108,7 @@ def category_crud_post_view(request, slug):
             return redirect(category_crud_post_view, slug=slug)
         else:
             validation_error = formset._non_form_errors.as_data()
-
+            print(validation_error[0])
     
     formset             = CategoryFormset(instance=obj)
     context             = {'formset': formset, 'validation_error': validation_error}
@@ -133,7 +135,7 @@ class CategoryInlineFormSet(BaseInlineFormSet):
                 # print("=============================" + str(i))
                 print(form.cleaned_data)
                 if form.cleaned_data.get('percent') > 100:
-                    raise forms.ValidationError("Error overflow")
+                    raise forms.ValidationError("Value(s) over 100")
                 else:
                     # form.instance.is_correct = True
                     total += form.cleaned_data['percent']
@@ -162,7 +164,9 @@ def team_crud_post_view(request, slug):
     template_name        = 'team/crud.html'
     TeamFormset            = inlineformset_factory(Contest, Team, 
                                                     fields=('teamName', 'numberOnBack', 'isDisqualified', 'isStillCompeting'), 
-                                                    can_delete=True, extra=1, max_num=obj.teamCount, 
+                                                    can_delete=True, 
+                                                    extra=1, 
+                                                    max_num=obj.teamCount, 
                                                     # //TODO widget,labels
                                                     )
     
@@ -202,7 +206,8 @@ def grade_crud_view(request, slug, no, pk):
     template_name       = 'grade/crud.html'
     GradeFormset        = inlineformset_factory(Team, Grade, 
                                                 fields=('categoryName', 'grade', 'bonus'), 
-                                                can_delete=False, extra=0,
+                                                can_delete=False, 
+                                                extra=0,
                                                 labels={
                                                         'categoryName': 'Category',
                                                         'grade': 'Grade',
@@ -213,7 +218,9 @@ def grade_crud_view(request, slug, no, pk):
                                                 #         'grade': 'Rate it',
                                                 #         'bonus': 'Add it',
                                                 # },
-                                                widgets={'categoryName': forms.Select(attrs={'disabled':'true'})}
+                                                widgets={'categoryName': forms.Select(attrs={'readonly':'true'}),
+                                                         'bonus': forms.NumberInput(attrs={'required':'false'})
+                                                        }
                                                 )
     
     if request.method == 'POST':
@@ -224,6 +231,10 @@ def grade_crud_view(request, slug, no, pk):
                 instance.postedBy = request.user
                 instance.save()
             return redirect(grade_crud_view, slug=slug, no=no, pk=pk)
+        else:
+            print('Nu a trecut validarea!')
+            print(formset.errors) 
+            print(formset._non_form_errors.as_data())
     formset         = GradeFormset(instance=obj)
     context         = {'formset': formset}
     return render(request, template_name, context)
@@ -299,6 +310,39 @@ def round_detail_view(request, slug, no):
     context         = {'object_list': qs, 'round': no}
     return render(request, template_name, context)
 
+
+# Extra =================================================================================================
+
+def addGradeNextRound(slug):
+    contest     = get_object_or_404(Contest, slug=slug)
+    team_qs     = contest.teams.filter(isDisqualified=False, isStillCompeting=True)
+    category_qs = contest.categories.all()
+    roundNr     = contest.currentRound
+    for team in team_qs:
+        for categ in category_qs:
+            grade               = Grade()
+            grade.roundNumber   = roundNr
+            grade.teamName      = team
+            grade.categoryName  = categ
+            grade.save()
+
+@login_required(login_url='admin/login/?next=/')
+def magic_button(request, slug):
+    contest     = get_object_or_404(Contest, slug=slug)
+    team_qs     = Team.objects.filter(contest__slug=slug).filter(isStillCompeting=True).filter(isDisqualified=False)
+    print(team_qs)
+    v = {}
+    for team in team_qs:
+        v[team.pk] = 0
+        grade_qs = Grade.objects.filter(teamName__pk=team.pk).filter(teamName__contest__slug=slug).filter(roundNumber=contest.currentRound)
+        for grade in grade_qs:
+            print(grade.grade)
+            v[team.pk] += grade.grade
+            v[team.pk] += grade.bonus
+    template_name    = 'contest/details.html'
+    context          = {'object': contest}
+    return render(request, template_name, context)
+
 # @login_required(login_url='admin/login/?next=/')
 # def magic_button(request, slug):
 #     team_qs    = Team.objects.filter(contest__slug=slug)
@@ -320,21 +364,3 @@ def round_detail_view(request, slug, no):
 #     template_name   = 'rezultat.html'
 #     context         = {'object': answer, 'winners': winners, 'score' : maxim}
 #     return render(request, template_name, context)
-
-
-# Extra =================================================================================================
-
-def addGradeNextRound(slug):
-    contest     = get_object_or_404(Contest, slug=slug)
-    team_qs     = contest.teams.filter(isDisqualified=False, isStillCompeting=True)
-    category_qs = contest.categories.all()
-    roundNr     = contest.currentRound
-    for team in team_qs:
-        for categ in category_qs:
-            grade               = Grade()
-            grade.roundNumber   = roundNr
-            grade.teamName      = team
-            grade.categoryName  = categ
-            grade.save()
-
-
