@@ -17,8 +17,8 @@ class Contest(models.Model):
 	slug 					=	models.SlugField(unique=True)
 	canVote					=	models.BooleanField(default=False)
 	isStarted				=	models.BooleanField(default=False)
-	currentRound			=	models.PositiveIntegerField(default=1)
-	currentSeries			=	models.PositiveIntegerField(default=1)
+	currentRound			=	models.PositiveIntegerField(default=0)
+	currentSeries			=	models.PositiveIntegerField(default=0)
 
 
 	def __str__(self):
@@ -71,6 +71,9 @@ class Round(models.Model):
 
 	def get_absolute_url(self):
 		return f"/contest/{self.contest.slug}/round/{self.number}/"
+
+	def get_grades_url(self):
+		return f"/contest/{self.contest.slug}/round/{self.number}/grades"
 
 # ==============================================================================================================================
 

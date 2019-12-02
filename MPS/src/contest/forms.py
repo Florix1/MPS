@@ -4,16 +4,26 @@ from contestapp.models import Contest
 from contestapp.models import Team
 from contestapp.models import Grade
 
+CONTEST_CHOICES= [
+    (0 , 'Evolutie Sincrona'),
+    (1 , 'Evolutie Asincrona'),
+    (2 , 'Battle'),
+    ]
+
+
 class ContestPostModelForm(forms.ModelForm):
     class Meta:
         model = Contest
-        fields = [
+        fields = (
         'title',
         'teamCount',
         'membersPerTeam',
         'typeOfContest',
-        'numberOfRounds'
-        ]
+        'numberOfRounds',
+        )
+        widgets = {
+            'typeOfContest': forms.Select(choices=CONTEST_CHOICES),
+        }
 
     def clean_title(self, *args, **kwargs):
         instance = self.instance
@@ -51,26 +61,3 @@ class TeamPostModelForm(forms.ModelForm):
         if qs.exists():
             raise forms.ValidationError("This team name has already been used.\nPlease try again.")
         return teamName
-
-class GradePostModelForm(forms.ModelForm):
-    class Meta:
-        model = Grade
-        fields = [
-        'grade',
-        'bonus',
-        'comment'
-        ]
-        # widgets = {
-        #    'name': models.CharField(max_length=25),
-        # }
-        labels = {
-           'grade': 'Grade',
-           'bonus': 'Bonus',
-           'comment': 'Small Comment'
-        }
-
-    def clean_grade(self, *args, **kwargs):
-        grade = self.cleaned_data.get('grade')
-        if grade < 0 or grade > 10:
-            raise forms.ValidationError("Grade is not valid.\nPlease try again")
-        return grade

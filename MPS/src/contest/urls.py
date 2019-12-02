@@ -36,14 +36,17 @@ from .views import (
     round_list_view,
     round_detail_view,
     grade_crud_view,
-    # magic_button,
+    grade_round_list_view,
+    elimination_button,
+    winner_button,
+    logout_request,
 )
 
 
 urlpatterns = [
 	path('', contest_post_list_view),
     path('admin/', admin.site.urls),
-
+    path('logout/', logout_request),
 # ============================================== Contest =================================================
 
     path('contest-list/', contest_post_list_view),
@@ -71,19 +74,20 @@ urlpatterns = [
     path('contest/<str:slug>/team/<int:pk>/member-list/', member_list_view),
     path('contest/<str:slug>/team/<int:pk>/member-new/', member_crud_view),
 
-# ==============================================  ?? ===================================================
+# ==============================================  Round ===================================================
 
     path('contest/<str:slug>/round-list/', round_list_view),
     path('contest/<str:slug>/round/<int:no>/', round_detail_view),
     # TODO integrate series if needed then check the grading view
     # path('contest/<str:slug>/round-list/', round_list_view),
 
-# # ==============================================  ?? ===================================================
+# ==============================================  Grade ===================================================
 
     path('contest/<str:slug>/round/<int:no>/team/<int:pk>/', grade_crud_view),
-
-#     path('contest/<str:slug>/rezultat',magic_button),
-
+    path('contest/<str:slug>/round/<int:no>/team/<int:pk>/', grade_crud_view),
+    path('contest/<str:slug>/round/<int:no>/grades', grade_round_list_view),
+    path('contest/<str:slug>/magic', elimination_button),
+    path('contest/<str:slug>/winner', winner_button),
 # ==============================================  ?? ===================================================
 
 ]

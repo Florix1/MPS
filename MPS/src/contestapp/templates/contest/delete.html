@@ -1,12 +1,11 @@
 {% extends 'base.html' %}
 
 
-
 {% block content %}
 <h1 style="color: white;">Are you sure you want to delete <i><b>"{{object.title}}"?</b></i></h1>
 
 <form method='POST'> {%csrf_token %}
-	
-	<button class='btn btn4 '>Yes, delete</button>
+	<button class='btn btn-outline-danger '>Yes, delete</button> <a class="btn btn-outline-success" href="/" role="button">No</a>
 </form>
-{% endblock %}	
+
+{% endblock %}

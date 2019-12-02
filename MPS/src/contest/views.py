@@ -5,6 +5,8 @@ from django.forms import inlineformset_factory, BaseInlineFormSet
 from .forms import ContestPostModelForm
 from django import forms
 from django.core.exceptions import ValidationError
+from django.contrib.auth import logout
+
 
 from contestapp.models import (
         Contest,
@@ -93,7 +95,9 @@ def category_crud_post_view(request, slug):
     CategoryFormset        = inlineformset_factory(Contest, Category, 
                                                     fields=('name', 'percent'), 
                                                     formset=CategoryInlineFormSet, 
-                                                    can_delete=True, extra=3, max_num=15,
+                                                    can_delete=True, 
+                                                    extra=3, 
+                                                    max_num=15,
                                                     # //TODO widget,labels
                                                     widgets={'categoryName': forms.Select(attrs={'disabled':'true'})}
                                                     )
@@ -106,7 +110,7 @@ def category_crud_post_view(request, slug):
             return redirect(category_crud_post_view, slug=slug)
         else:
             validation_error = formset._non_form_errors.as_data()
-
+            print(validation_error[0])
     
     formset             = CategoryFormset(instance=obj)
     context             = {'formset': formset, 'validation_error': validation_error}
@@ -133,7 +137,7 @@ class CategoryInlineFormSet(BaseInlineFormSet):
                 # print("=============================" + str(i))
                 print(form.cleaned_data)
                 if form.cleaned_data.get('percent') > 100:
-                    raise forms.ValidationError("Error overflow")
+                    raise forms.ValidationError("Value(s) over 100")
                 else:
                     # form.instance.is_correct = True
                     total += form.cleaned_data['percent']
@@ -162,7 +166,9 @@ def team_crud_post_view(request, slug):
     template_name        = 'team/crud.html'
     TeamFormset            = inlineformset_factory(Contest, Team, 
                                                     fields=('teamName', 'numberOnBack', 'isDisqualified', 'isStillCompeting'), 
-                                                    can_delete=True, extra=1, max_num=obj.teamCount, 
+                                                    can_delete=True, 
+                                                    extra=1, 
+                                                    max_num=obj.teamCount, 
                                                     # //TODO widget,labels
                                                     )
     
@@ -202,7 +208,8 @@ def grade_crud_view(request, slug, no, pk):
     template_name       = 'grade/crud.html'
     GradeFormset        = inlineformset_factory(Team, Grade, 
                                                 fields=('categoryName', 'grade', 'bonus'), 
-                                                can_delete=False, extra=0,
+                                                can_delete=False, 
+                                                extra=0,
                                                 labels={
                                                         'categoryName': 'Category',
                                                         'grade': 'Grade',
@@ -213,7 +220,9 @@ def grade_crud_view(request, slug, no, pk):
                                                 #         'grade': 'Rate it',
                                                 #         'bonus': 'Add it',
                                                 # },
-                                                widgets={'categoryName': forms.Select(attrs={'disabled':'true'})}
+                                                widgets={'categoryName': forms.Select(attrs={'readonly':'true'}),
+                                                         'bonus': forms.NumberInput(attrs={'required':'false'})
+                                                        }
                                                 )
     
     if request.method == 'POST':
@@ -224,8 +233,24 @@ def grade_crud_view(request, slug, no, pk):
                 instance.postedBy = request.user
                 instance.save()
             return redirect(grade_crud_view, slug=slug, no=no, pk=pk)
+        else:
+            print('Nu a trecut validarea!')
+            print(formset.errors) 
+            print(formset._non_form_errors.as_data())
     formset         = GradeFormset(instance=obj)
     context         = {'formset': formset}
+    return render(request, template_name, context)
+
+
+@login_required(login_url='admin/login/?next=/')
+def grade_round_list_view(request, slug, no):
+    qs = Grade.objects.filter(teamName__contest__slug=slug).filter(roundNumber=no)
+    team_qs = Team.objects.filter(contest__slug=slug)
+    grades = []
+    for team in team_qs:
+        grades.append(qs.filter(teamName__pk=team.pk))
+    template_name    = 'grade/round_list.html'
+    context         = {'object_list': grades, 'round': no}
     return render(request, template_name, context)
 
 # @login_required(login_url='admin/login/?next=/')
@@ -279,8 +304,6 @@ def member_list_view(request, slug, pk):
     return render(request, template_name, context)
 
 
-
-
 # Round =================================================================================================
 
 
@@ -297,6 +320,100 @@ def round_detail_view(request, slug, no):
     qs = Team.objects.filter(contest__slug=slug)
     template_name    = 'round/team_list.html'
     context         = {'object_list': qs, 'round': no}
+    return render(request, template_name, context)
+
+
+# Extra =================================================================================================
+
+
+def addGradeNextRound(slug):
+    contest     = get_object_or_404(Contest, slug=slug)
+    team_qs     = contest.teams.filter(isDisqualified=False, isStillCompeting=True)
+    category_qs = contest.categories.all()
+    roundNr     = contest.currentRound
+    for team in team_qs:
+        for categ in category_qs:
+            grade               = Grade()
+            grade.roundNumber   = roundNr
+            grade.teamName      = team
+            grade.categoryName  = categ
+            grade.save()
+
+
+@login_required(login_url='admin/login/?next=/')
+def elimination_button(request, slug):
+    contest     = get_object_or_404(Contest, slug=slug)
+    team_qs     = Team.objects.filter(contest__slug=slug).filter(isStillCompeting=True).filter(isDisqualified=False)
+    print(team_qs)
+    v = {}
+    for team in team_qs:
+        v[team.pk] = 0
+        grade_qs = Grade.objects.filter(teamName__pk=team.pk).filter(teamName__contest__slug=slug).filter(roundNumber=contest.currentRound)
+        for grade in grade_qs:
+            print(team.teamName + ' ' +  str(grade.grade) + ' ' + grade.categoryName.name + ' %' + str(grade.categoryName.percent))
+            v[team.pk] += grade.grade * grade.categoryName.percent
+            v[team.pk] += grade.bonus
+    
+    answer =  []
+    answer.append(team_qs.first())
+    minim  = v[answer[0].pk]
+    print(minim)
+    for team in team_qs:
+        print(team.teamName + ' ' + str(v[team.pk]))
+        if v[team.pk] < minim:
+            answer.clear()
+            answer.append(team)
+            minim = v[team.pk]
+        elif v[team.pk] == minim:
+            answer.append(team)
+
+    answer = list(set(answer))
+    if (len(answer) == 1):
+        answer[0].isStillCompeting = False
+        answer[0].save()
+        print('Elimin pe cineva!!!!!')
+    print('Loser' + str(answer))
+
+    template_name    = 'contest/details.html'
+    context          = {'object': contest, 'answer': answer}
+    return render(request, template_name, context)
+
+
+@login_required(login_url='admin/login/?next=/')
+def winner_button(request, slug):
+    contest     = get_object_or_404(Contest, slug=slug)
+    team_qs     = Team.objects.filter(contest__slug=slug).filter(isStillCompeting=True).filter(isDisqualified=False)
+    print(team_qs)
+    v = {}
+    for team in team_qs:
+        v[team.pk] = 0
+        grade_qs = Grade.objects.filter(teamName__pk=team.pk).filter(teamName__contest__slug=slug).filter(roundNumber=contest.currentRound)
+        for grade in grade_qs:
+            print(team.teamName + ' ' +  str(grade.grade) + ' ' + grade.categoryName.name + ' %' + str(grade.categoryName.percent))
+            v[team.pk] += grade.grade * grade.categoryName.percent
+            v[team.pk] += grade.bonus
+    
+    answer =  []
+    answer.append(team_qs.first())
+    maxim  = v[answer[0].pk]
+    print(maxim)
+    for team in team_qs:
+        if v[team.pk] > maxim:
+            answer.clear()
+            answer.append(team)
+            maxim = v[team.pk]
+        elif v[team.pk] == maxim:
+            answer.append(team)
+
+    answer = list(set(answer))
+    if (len(answer) == 1):
+        winner = answer[0]
+    else:
+        winner = answer
+
+    print('Winner' + str(answer))
+    template_name    = 'contest/details.html'
+    context          = {'object': contest, 'winner': winner}
     return render(request, template_name, context)
 
 # @login_required(login_url='admin/login/?next=/')
@@ -321,20 +438,7 @@ def round_detail_view(request, slug, no):
 #     context         = {'object': answer, 'winners': winners, 'score' : maxim}
 #     return render(request, template_name, context)
 
-
-# Extra =================================================================================================
-
-def addGradeNextRound(slug):
-    contest     = get_object_or_404(Contest, slug=slug)
-    team_qs     = contest.teams.filter(isDisqualified=False, isStillCompeting=True)
-    category_qs = contest.categories.all()
-    roundNr     = contest.currentRound
-    for team in team_qs:
-        for categ in category_qs:
-            grade               = Grade()
-            grade.roundNumber   = roundNr
-            grade.teamName      = team
-            grade.categoryName  = categ
-            grade.save()
-
-
+@login_required(login_url='admin/login/?next=/')
+def logout_request(request):
+    logout(request)
+    return redirect("/")
