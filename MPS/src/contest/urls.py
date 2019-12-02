@@ -39,13 +39,14 @@ from .views import (
     grade_round_list_view,
     elimination_button,
     winner_button,
+    logout_request,
 )
 
 
 urlpatterns = [
 	path('', contest_post_list_view),
     path('admin/', admin.site.urls),
-
+    path('logout/', logout_request),
 # ============================================== Contest =================================================
 
     path('contest-list/', contest_post_list_view),

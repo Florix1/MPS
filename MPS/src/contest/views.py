@@ -5,6 +5,8 @@ from django.forms import inlineformset_factory, BaseInlineFormSet
 from .forms import ContestPostModelForm
 from django import forms
 from django.core.exceptions import ValidationError
+from django.contrib.auth import logout
+
 
 from contestapp.models import (
         Contest,
@@ -435,3 +437,8 @@ def winner_button(request, slug):
 #     template_name   = 'rezultat.html'
 #     context         = {'object': answer, 'winners': winners, 'score' : maxim}
 #     return render(request, template_name, context)
+
+@login_required(login_url='admin/login/?next=/')
+def logout_request(request):
+    logout(request)
+    return redirect("/")
