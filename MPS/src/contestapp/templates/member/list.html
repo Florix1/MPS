@@ -3,18 +3,19 @@
 
 
 {% block content %}
-<a type="button" class="btn btn9 btn-lg" style="color: black;" href='{{ request.META.HTTP_REFERER }}'>Back to Team List</a>
+<div style="padding-top: 1%; padding-left: 1%">
+	<a type="button" class="btn btn9 btn-lg" style="font-family: TeX Gyre Adventor;color: black;"
+	   href='{{ request.META.HTTP_REFERER }}'>Back to Teams</a>
+</div>
+
 	{% for object in object_list %}
-		<div class="container h-100" style="padding-top: 1%;">
-			<div class="d-flex h-100">
-				<div class="align-self-center mx-auto btn-group-vertical" style="width:800px;" align="left">
-					<a type="button" class="btn btn8 btn-lg" style="font-family: Candara; color: black; text-opacity: 100%">
-						{{object.name}} {{object.age}}</a>
-				</div>
+		<div style="padding-top: 1%; padding-left: 1%">
+			<div class=" mx-auto btn-group-vertical" style="width:500px;" >
+				<a type="button" class="btn btn8 btn-lg" style="font-family: Bauhaus; color: black; text-opacity: 100%">
+					{{object.name}} {{object.age}}</a>
 			</div>
 		</div>
 
 	{% endfor %}
-
 
 {% endblock %}
