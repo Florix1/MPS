@@ -12,7 +12,8 @@
 	<div class="fieldWrapper" style="color: white;">
 		{{ formset.as_p }}
 	</div>
-	<br><button type='submit' class="btn btn2 btn-lg">Update</button>
+	<br><button type='submit' class="btn btn2 btn-lg">Update</button> <a type="button" class="btn btn2 btn-lg" style="color: black;" href='{{ object.get_absolute_url }}'>Back</a></button>
+</form>
 
 </form>
 {% endblock %}

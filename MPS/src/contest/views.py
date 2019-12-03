@@ -34,7 +34,7 @@ def contest_post_create_view(request):
     form = ContestPostModelForm(request.POST or None)
     if form.is_valid():
         form.save()
-        form = ContestPostModelForm()
+        return redirect("/")
     template_name    = 'contest/form.html'
     context         = {'form': form}
     return render(request, template_name, context)
@@ -55,7 +55,7 @@ def contest_post_update_view(request, slug):
     if form.is_valid():
         form.save()
     template_name    = 'contest/update.html'
-    context         = {'form': form}
+    context         = {'form': form, 'object': obj}
     return render(request, template_name, context)
 
 
@@ -69,24 +69,31 @@ def contest_post_delete_view(request, slug):
         return redirect("/")
     return render(request, template_name, context)
 
+
 @login_required(login_url='admin/login/?next=/')
 def contest_start_view(request, slug):
     obj = get_object_or_404(Contest, slug=slug)
-    obj.isStarted   = True
-    obj.canVote     = True
-    for i in range(obj.numberOfRounds):
-        rnd         = Round()
-        rnd.number  = i + 1
-        rnd.contest = obj
-        rnd.save()
-    addGradeNextRound(slug)
     template_name   = 'contest/start.html'
     context         = {'object': obj}
+
+    if request.method == "POST":
+        # TODO check if data was posted
+        obj.isStarted   = True
+        obj.canVote     = True
+        obj.save()
+        for i in range(obj.numberOfRounds):
+            rnd         = Round()
+            rnd.number  = i + 1
+            rnd.contest = obj
+            rnd.save()
+        addGradeNextRound(slug)
+        return redirect(obj.get_absolute_url())
+
     return render(request, template_name, context)
 
 
-
 # Category  =================================================================
+
 
 @login_required(login_url='admin/login/?next=/')
 def category_crud_post_view(request, slug):
@@ -124,6 +131,7 @@ def category_post_list_view(request, slug):
     template_name    = 'category/list.html'
     context         = {'object_list': qs}
     return render(request, template_name, context)
+
 
 class CategoryInlineFormSet(BaseInlineFormSet):
     def clean(self, *args, **kwargs):
@@ -164,21 +172,30 @@ def team_list_post_view(request, slug):
 def team_crud_post_view(request, slug):
     obj                 = get_object_or_404(Contest, slug=slug)
     template_name        = 'team/crud.html'
-    TeamFormset            = inlineformset_factory(Contest, Team, 
-                                                    fields=('teamName', 'numberOnBack', 'isDisqualified', 'isStillCompeting'), 
-                                                    can_delete=True, 
-                                                    extra=1, 
-                                                    max_num=obj.teamCount, 
-                                                    # //TODO widget,labels
-                                                    )
-    
+    if (obj.isStarted):
+        TeamFormset            = inlineformset_factory(Contest, Team, 
+                                                        fields=('teamName', 'numberOnBack', 'isDisqualified', 'isStillCompeting'), 
+                                                        can_delete=True, 
+                                                        extra=1, 
+                                                        max_num=obj.teamCount, 
+                                                        # //TODO widget,labels
+                                                        )
+    else:
+        TeamFormset            = inlineformset_factory(Contest, Team, 
+                                                        fields=('teamName', 'numberOnBack'), 
+                                                        can_delete=True, 
+                                                        extra=1, 
+                                                        max_num=obj.teamCount, 
+                                                        # //TODO widget,labels
+                                                        )
+
     if request.method == 'POST':
         formset = TeamFormset(request.POST, instance=obj)
         if formset.is_valid():
             formset.save()
             return redirect(team_crud_post_view, slug=slug)
     formset         = TeamFormset(instance=obj)
-    context         = {'formset': formset}
+    context         = {'formset': formset, 'object': obj}
     return render(request, template_name, context)
 
 
@@ -328,9 +345,13 @@ def round_detail_view(request, slug, no):
 
 def addGradeNextRound(slug):
     contest     = get_object_or_404(Contest, slug=slug)
+    contest.currentRound  += 1
+    contest.save()
+
     team_qs     = contest.teams.filter(isDisqualified=False, isStillCompeting=True)
     category_qs = contest.categories.all()
     roundNr     = contest.currentRound
+    
     for team in team_qs:
         for categ in category_qs:
             grade               = Grade()
@@ -374,9 +395,11 @@ def elimination_button(request, slug):
         print('Elimin pe cineva!!!!!')
     print('Loser' + str(answer))
 
+    addGradeNextRound(slug)
+
     template_name    = 'contest/details.html'
     context          = {'object': contest, 'answer': answer}
-    return render(request, template_name, context)
+    return redirect(contest.get_absolute_url())
 
 
 @login_required(login_url='admin/login/?next=/')
@@ -412,7 +435,7 @@ def winner_button(request, slug):
         winner = answer
 
     print('Winner' + str(answer))
-    template_name    = 'contest/details.html'
+    template_name    = 'rezultat.html'
     context          = {'object': contest, 'winner': winner}
     return render(request, template_name, context)
 

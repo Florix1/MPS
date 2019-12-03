@@ -84,10 +84,10 @@ urlpatterns = [
 # ==============================================  Grade ===================================================
 
     path('contest/<str:slug>/round/<int:no>/team/<int:pk>/', grade_crud_view),
-    path('contest/<str:slug>/round/<int:no>/team/<int:pk>/', grade_crud_view),
     path('contest/<str:slug>/round/<int:no>/grades', grade_round_list_view),
     path('contest/<str:slug>/magic', elimination_button),
     path('contest/<str:slug>/winner', winner_button),
+    
 # ==============================================  ?? ===================================================
 
 ]
